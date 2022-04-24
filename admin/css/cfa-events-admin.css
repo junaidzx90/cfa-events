@@ -1,0 +1,89 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ .registrants_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid #ddd;
+}
+.registrantsTable {
+    margin-top: 30px;
+}
+.registrantsTable table {
+    margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.registrantsTable table thead {
+    background-color: #8FD9F9;
+}
+.registrantsTable table thead tr th, .registrantsTable table tbody tr td{
+    padding: 5px;
+}
+th#export_registrants {
+    width: 120px;
+}
+td.export_registrants {
+    text-align: right;
+}
+
+.cfa_setting_page {
+    margin-top: 20px;
+}
+.cfa_setting_page .settings__tab {
+    overflow: hidden;
+    border-top: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+.cfa_setting_page a.tablinks {
+    color: #2271b1;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+}
+/* Style the buttons inside the tab */
+.cfa_setting_page .settings__tab a {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 14px;
+    transition: 0.3s;
+}
+/* Change background color of buttons on hover */
+.cfa_setting_page .settings__tab a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.cfa_setting_page .settings__tab a.active {
+    background-color: #2271b1;
+    color: #fff;
+}
+
+/* Style the tab content */
+.cfa_setting_page .tabcontent {
+    display: none;
+    border-top: none;
+}
+
+.cfa_setting_page .tabcontent.active{
+    display: block;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.cfa-settings table{
+    margin: 0;
+}
+
+.cfa-settings p.submit {
+    padding: 0;
+}
+.wp-picker-holder {
+    position: absolute;
+}

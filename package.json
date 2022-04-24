@@ -1,0 +1,13 @@
+{
+  "name": "cfa-events",
+  "version": "1.0.0",
+  "description": "=== CFA Events === Contributors: (this should be a list of wordpress.org userid's) Donate link: https://www.example.com/unknown Tags: events plugin, spam Requires at least: 3.0.1 Tested up to: 5.9.3 Stable tag: 4.3 License: GPLv2 or later License URI: http://www.gnu.org/licenses/gpl-2.0.html",
+  "author": "Unknown",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "gulp-uglify": "^3.0.2",
+    "sass": "^1.50.1"
+  }
+}
