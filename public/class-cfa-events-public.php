@@ -55,6 +55,9 @@ class Cfa_Events_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+
+		add_shortcode( 'latest_events', [$this, 'latest_events'] );
+		add_shortcode( 'previous_events', [$this, 'previous_events'] );
 	}
 
 	/**
@@ -75,7 +78,9 @@ class Cfa_Events_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		if ( is_post_type_archive( 'events' ) || is_singular( 'events' ) ) {
+		global $post;
+		
+		if ( (is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'latest_events') || has_shortcode( $post->post_content, 'previous_events') ) || is_singular( 'events' ) ) {
 			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/style.css', array(), $this->version, 'all' );
 		}
 	}
@@ -99,13 +104,14 @@ class Cfa_Events_Public {
 		 * class.
 		 */
 
-		if ( is_post_type_archive( 'events' ) || is_singular( 'events' ) ) {
+		global $post;
+
+		if (!is_admin(  ) && (is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'latest_events') || has_shortcode( $post->post_content, 'previous_events') ) || is_singular( 'events' ) ) {
 			wp_enqueue_script( 'cfavue', plugin_dir_url( __FILE__ ) . 'js/vue.min.js', array(  ), $this->version, false );
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/index.js', array( 'jquery', 'cfavue' ), $this->version, true );
 			wp_localize_script( $this->plugin_name, 'cfa_ajax', array(
 				'ajaxurl' => admin_url( "admin-ajax.php" ),
-				'nonce'	=> wp_create_nonce( "cfa_nonce" ),
-				'latestEvents' => ((get_option( 'enable__disable_latest_events', 'on' ) === 'on') ? true : false)
+				'nonce'	=> wp_create_nonce( "cfa_nonce" )
 			) );
 		}
 	}
@@ -130,16 +136,31 @@ class Cfa_Events_Public {
 		<?php
 	}
 
-	function template_redirect($template){
-		if ( is_post_type_archive( 'events' ) ) {
-			$theme_files = array('archive-events.php', plugin_dir_path( __FILE__ ).'partials/archive-events.php');
-			$exists_in_theme = locate_template($theme_files, false);
-			if ( $exists_in_theme != '' ) {
-				$template = $exists_in_theme;
-			} else {
-				$template = plugin_dir_path( __FILE__ ). 'partials/archive-events.php';
-			}
+	function latest_events(){
+		ob_start();
+		require_once plugin_dir_path( __FILE__ )."partials/latest-events.php";
+		$output = ob_get_contents();
+		ob_get_clean();
+		return $output;
+	}
+
+	function previous_events(){
+		if(is_admin(  )){
+			ob_start();
+			require_once plugin_dir_path( __FILE__ )."partials/elementor-preview.php";
+			$output = ob_get_contents();
+			ob_get_clean();
+			return $output;
+		}else{
+			ob_start();
+			require_once plugin_dir_path( __FILE__ )."partials/archive-events.php";
+			$output = ob_get_contents();
+			ob_get_clean();
+			return $output;
 		}
+	}
+
+	function template_redirect($template){
 
 		if ( is_singular( 'events' )) {
 			$theme_files = array('single-event.php', plugin_dir_path( __FILE__ ).'partials/single-event.php');
@@ -162,27 +183,32 @@ class Cfa_Events_Public {
 	function email_template($title, $contents, $footer){
 		$template = '<body bgcolor="#f5f5f5" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" offset="0" style="padding:70px 0 70px 0;">';
 		$template .= '<table width="600" height="auto" align="center" cellpadding="0" cellspacing="0" style="background-color:#fdfdfd; border:1px solid #dcdcdc; border-radius:3px !important;">';
-		$template .= '<tr>';
-		$template .= '<td width="600" height="auto" bgcolor="#000" border="0" style="padding:36px 48px; display:block; margin: 0px auto;">';
-		// Heading
-		$template .= '<h1 style="color:#ffffff; font-family:&quot; Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; font-size:30px; line-height:150%; font-weight:300; margin:0; text-align:left;">'.$title.'</h1>';
 
-		$template .= '</td>';
-		$template .= '</tr>';
+		if(!empty($title)){
+			$template .= '<tr>';
+			$template .= '<td width="600" height="auto" bgcolor="#000" border="0" style="padding:36px 48px; display:block; margin: 0px auto;">';
+			// Heading
+			$template .= '<h1 style="color:#ffffff; font-family:&quot; Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; font-size:30px; line-height:150%; font-weight:300; margin:0; text-align:left;">'.$title.'</h1>';
+			$template .= '</td>';
+			$template .= '</tr>';
+		}
+
 		$template .= '<tr>';
 		$template .= '<td width="600" bgcolor="#fdfdfd" border="0" style="color:#737373; font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; font-size:14px; line-height:150%; text-align:left; padding:48px;">';
 		// Contents
 		$template .= wpautop($contents, true);
-
 		$template .= '</td>';
 		$template .= '</tr>';
-		$template .= '<tr>';
-		$template .= '<td width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">';
-		// Footer
-		$template .= '<p>'.wpautop( $footer, true ).'</p>';
 
-		$template .= '</td>';
-		$template .= '</tr>';
+		if(!empty($footer)){
+			$template .= '<tr>';
+			$template .= '<td width="600" border="0" style="padding:0 48px 48px 48px; color:#707070; font-family:Arial; font-size:12px; line-height:125%; text-align:center;">';
+			// Footer
+			$template .= '<p>'.wpautop( $footer, true ).'</p>';
+			$template .= '</td>';
+			$template .= '</tr>';
+		}
+
 		$template .= '</table>';
 		$template .= '</body>';
 
@@ -227,14 +253,21 @@ class Cfa_Events_Public {
 	
 					$_SESSION['event_registrants'] = $event_id;
 
-					$emaildata = array(
-						'title' => get_option('cfa_email_title'),
-						'subject' => get_option('cfa_email_subject'),
-						'contents' => get_option('cfa_email_contents'),
-						'footer' => get_option('cfa_email_footer'),
-						'to' => $registrant_email
-					);
-					$this->send_email_notification($emaildata); // Sent email
+					$eml_title = sanitize_text_field( get_post_meta($event_id, 'cfa_email_title' , true) );
+					$email_subject = sanitize_text_field( get_post_meta($event_id, 'cfa_email_subject' , true) );
+					$email_contents = get_post_meta($event_id, 'cfa_email_contents' , true);
+					$email_footer = get_post_meta($event_id, 'cfa_email_footer' , true);
+					
+					if($email_subject && $email_contents){
+						$emaildata = array(
+							'title' => $eml_title,
+							'subject' => $email_subject,
+							'contents' => $email_contents,
+							'footer' => $email_footer,
+							'to' => $registrant_email
+						);
+						$this->send_email_notification($emaildata); // Sent email
+					}
 	
 					echo json_encode(array("success" => "We are looking forward to seeing you at our event. You will recieve a confirmation email for your registration shortly.
 					If you haven't already, add this event to your calendar using the links above to make sure you don't miss it."));
@@ -324,8 +357,8 @@ class Cfa_Events_Public {
 			'post_status' => 'publish',
 			'posts_per_page' => $perpage,
 			'paged' => $page,
-    		'meta_key' => '__event_date',
-    		'orderby' => 'meta_value',
+			'meta_key' => '__event_date',
+			'orderby' => 'meta_value',
 			'meta_type' => 'DATE',
 			'order' => 'ASC',
 		);
@@ -342,9 +375,8 @@ class Cfa_Events_Public {
 				);
 			}
 		}
-
+	
 		$previousEvents = array();
-
 		$eventsObj = new WP_Query( $args );
 		if ( $eventsObj->have_posts() ){
 			while ( $eventsObj->have_posts() ){
@@ -373,49 +405,8 @@ class Cfa_Events_Public {
 			}
 		}
 
-		$latestEvents = array();
-		if(get_option( 'enable__disable_latest_events', 'on' ) === "on"){
-			$args2 = array(
-				'post_type' => 'events',
-				'post_status' => 'publish',
-				'posts_per_page' => 3,
-				'orderby' => 'date',
-				'order' => 'DESC'
-			);
-
-			$lestestEventsObj = new WP_Query( $args2 );
-			if ( $lestestEventsObj->have_posts() ){
-				while ( $lestestEventsObj->have_posts() ){
-					$lestestEventsObj->the_post();
-
-					$event_id2 = get_post()->ID;
-					$post_title2 = get_the_title(  );
-					$event_date2 = get_post_meta($event_id2, '__event_date', true);
-					$event_date2 = date("j F, Y", strtotime($event_date2));
-					$location2 = get_post_meta($event_id2, '__event_location', true);
-					$thumbnail2 = ((get_the_post_thumbnail_url(  )) ? get_the_post_thumbnail_url(  ) : get_option('cfa_fallback_thumb') );
-					$excerpt2 = wp_trim_words(get_the_content(), 30);
-					$permalink2 = get_the_permalink( get_post()->ID );
-
-					$event2 = array(
-						'event_id' => $event_id2,
-						'title' => $post_title2,
-						'thumbnail' => $thumbnail2,
-						'date' => $event_date2,
-						'location' => $location2,
-						'excerpt' => $excerpt2,
-						'permalink' => $permalink2
-					);
-
-					$latestEvents[] = $event2;
-				}
-			}
-
-		}
-
 		echo json_encode(array(
 			'previousEvents' => $previousEvents,
-			'latestEvents' => $latestEvents,
 			'maxpages' => $eventsObj->max_num_pages
 		));
 		die;

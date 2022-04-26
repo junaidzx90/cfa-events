@@ -1,10 +1,5 @@
 // Archive page
 #cfa_events{
-    padding: 30px 0;
-    max-width: 1080px;
-    width: 100%;
-    margin: auto;
-    margin-bottom: 30px;
     h3.head3 {
         padding: 20px 0px;
         font-size: 28px;
@@ -76,81 +71,6 @@
             }
         }
     }
-    .events_wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
-        grid-gap: 20px;
-        @media only screen and (max-width: 480px) {
-            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-        }
-        .event_card {
-            background: #fff;
-            -webkit-box-shadow: 1px 1px 4px -1px black;
-            box-shadow: 1px 1px 4px -1px black;
-            height: -webkit-auto;
-            height: -moz-auto;
-            height: auto;
-            position: relative;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            .event_thumbnail {
-                max-height: 200px !important;
-                overflow: hidden;
-                img {
-                    min-width: 100%;
-                }
-            }
-           
-            .event_contents {
-                padding: 30px;
-                margin-bottom: auto;
-                h4.event__title {
-                    font-weight: 700;
-                    font-size: var(--cfa_card_title_font_size);
-                    line-height: 26px;
-                    padding-bottom: 5px;
-                    color: var(--cfa_title_color);
-                }
-                p.event__date {
-                    font-size: var(--cfa_date_font_size);
-                    font-weight: 500;
-                    color: var(--cfa_date_color);
-                    margin-bottom: 15px;
-                    padding: 0;
-                }
-                p.event_excerpt {
-                    margin: 0;
-                    font-size: var(--cfa_content_font_size);
-                    line-height: 22px;
-                    color: var(--cfa_content_text_color);
-                }
-            }
-            .seemore_btn_box {
-                padding: 0 30px 30px;
-                text-align: center;
-                a.cfa_btn {
-                    background-color: var(--cfa_static_color);
-                    border-radius: 0;
-                    color: var(--cfa_static_text_color);
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    font-style: normal;
-                    font-size: 14px;
-                }
-                a.cfa_btn:hover{
-                    transition: .3s;
-                    background-color: var(--cfa_selected_color);
-                    color: var(--cfa_selected_text_color);
-                    -webkit-transition: .3s;
-                    -moz-transition: .3s;
-                    -ms-transition: .3s;
-                    -o-transition: .3s;
-                }
-            }
-        }
-    }
 
     .cfaLoader {
         position: fixed;
@@ -163,8 +83,85 @@
         align-items: center;
         backdrop-filter: blur(2px);
         background-color: #b1b1b190;
+        z-index: 999999;
     }
-}  
+}
+
+.events_wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
+    grid-gap: 20px;
+    @media only screen and (max-width: 480px) {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
+    .event_card {
+        background: #fff;
+        -webkit-box-shadow: 1px 1px 4px -1px black;
+        box-shadow: 1px 1px 4px -1px black;
+        height: -webkit-auto;
+        height: -moz-auto;
+        height: auto;
+        position: relative;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        .event_thumbnail {
+            max-height: 200px !important;
+            overflow: hidden;
+            img {
+                min-width: 100%;
+            }
+        }
+       
+        .event_contents {
+            padding: 30px;
+            margin-bottom: auto;
+            h4.event__title {
+                font-weight: 700;
+                font-size: var(--cfa_card_title_font_size);
+                line-height: 26px;
+                padding-bottom: 5px;
+                color: var(--cfa_title_color);
+            }
+            p.event__date {
+                font-size: var(--cfa_date_font_size);
+                font-weight: 500;
+                color: var(--cfa_date_color);
+                margin-bottom: 15px;
+                padding: 0;
+            }
+            p.event_excerpt {
+                margin: 0;
+                font-size: var(--cfa_content_font_size);
+                line-height: 22px;
+                color: var(--cfa_content_text_color);
+            }
+        }
+        .seemore_btn_box {
+            padding: 0 30px 30px;
+            text-align: center;
+            a.cfa_btn {
+                background-color: var(--cfa_static_color);
+                border-radius: 0;
+                color: var(--cfa_static_text_color);
+                padding: 10px 20px;
+                text-decoration: none;
+                font-style: normal;
+                font-size: 14px;
+            }
+            a.cfa_btn:hover{
+                transition: .3s;
+                background-color: var(--cfa_selected_color);
+                color: var(--cfa_selected_text_color);
+                -webkit-transition: .3s;
+                -moz-transition: .3s;
+                -ms-transition: .3s;
+                -o-transition: .3s;
+            }
+        }
+    }
+}
 
 // Single page
 div#event_page {

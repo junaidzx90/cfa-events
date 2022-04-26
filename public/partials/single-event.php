@@ -8,9 +8,14 @@ if($date){
 }
 
 $star_time = get_post_meta(get_post()->ID, '__event_start_time', true);
-$star_time = date("g:ia", strtotime($star_time));
+if($star_time){
+    $star_time = date("g:ia", strtotime($star_time));
+}
+
 $end_time = get_post_meta(get_post()->ID, '__event_end_time', true);
-$end_time = date("g:ia", strtotime($end_time));
+if($end_time){
+    $end_time = date("g:ia", strtotime($end_time));
+}
 
 $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
 ?>
@@ -30,7 +35,8 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
     ?>
 
     <h1 class="head1"><?php echo the_title(); ?></h1>
-    <p class="event__date"><?php echo $date ?> | <?php echo $event_location ?></p>
+
+    <p class="event__date"><?php echo $date.(($event_location && $date) ? ' | ' : '').$event_location ?></p>
 
     <div class="event_thumbnail">
         <?php echo the_post_thumbnail( 'large' ) ?>
@@ -45,7 +51,13 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
     if(get_active_event(get_post()->ID)){
         ?>
         <div class="information_box">
-            <p class="location"><strong>Venue:</strong> <?php echo $event_location ?> <a target="_blank" href="<?php echo (($location_url) ? $location_url : '#') ?>">View map</a></p>
+            <?php
+            if(!empty($location_url)){
+                ?>
+                <p class="location"><strong>Venue:</strong> <?php echo $event_location ?> <a target="_blank" href="<?php echo (($location_url) ? $location_url : '#') ?>">View map</a></p>
+                <?php
+            }
+            ?>
             <p><strong>Date:</strong> <?php echo $date ?></p>
             <p><strong>Time:</strong> <?php echo $star_time." - ".$end_time?></p>
 

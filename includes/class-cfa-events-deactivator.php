@@ -30,7 +30,7 @@ class Cfa_Events_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		delete_option( 'cfa_events_permalinks_flush' );
 	}
 
 }

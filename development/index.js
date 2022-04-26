@@ -1,16 +1,15 @@
 const cfa = new Vue({
     el: "#cfa_events",
     data: {
-        isLatestEvents: ((cfa_ajax.latestEvents) ? true : false),
 		isDisabled: true,
         currentPage: 1,
 		max_pages: 0,
-        latestEvents: [],
         previousEvents: [],
         currentFilter: ''
     },
     methods: {
         cfa_year_filter: function(event, year){
+
             cfa.currentPage = 1;
             cfa.currentFilter = year;
 
@@ -44,6 +43,7 @@ const cfa = new Vue({
 			});
         },
         loadmore_events: function(){
+
             jQuery.ajax({
 				type: "get",
 				url: cfa_ajax.ajaxurl,
@@ -78,6 +78,7 @@ const cfa = new Vue({
 
     },
     mounted: function () {
+
 		let cfaEvents = new Promise((resolve, reject) => {
 			jQuery.ajax({
 				type: "get",
@@ -95,17 +96,13 @@ const cfa = new Vue({
 
 		cfaEvents.then(response => {
 			cfa.isDisabled = false;
-			
-			if (response.previousEvents) {
-				cfa.previousEvents = response.previousEvents;
-			}
-			if (response.latestEvents) {
-				cfa.latestEvents = response.latestEvents;
-			}
+            if (response.previousEvents) {
+                cfa.previousEvents = response.previousEvents;
+            }
 
-			if (response.maxpages) {
-				cfa.max_pages = response.maxpages;
-			}
+            if (response.maxpages) {
+                cfa.max_pages = response.maxpages;
+            }
 		})
 	}
 });

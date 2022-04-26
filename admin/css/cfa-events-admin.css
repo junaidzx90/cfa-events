@@ -87,3 +87,6 @@ td.export_registrants {
 .wp-picker-holder {
     position: absolute;
 }
+.cfa_eml_input {
+    margin-bottom: 20px;
+}

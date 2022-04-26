@@ -12,42 +12,10 @@
  * @subpackage Cfa_Events/public/partials
  */
 ?>
-
-<?php get_header(); ?>
-
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
-
 <div id="cfa_events">
-    <!-- Latest Events -->
-    <div v-if="isLatestEvents" class="latest_events">
-        <h3 class="head3"><b>Latest</b> Events</h3>
-        <div class="events_wrapper">
-            <!-- Event Card -->
-            <div v-for="event in latestEvents" :key="event.id" class="event_card">
-                <div class="event_thumbnail">
-                    <img :src="event.thumbnail" alt="thumbnail">
-                </div>
-
-                <div class="event_contents">
-                    <h4 class="event__title">{{event.title}}</h4>
-                    <p class="event__date">{{event.date}} | {{event.location}}</p>
-                    <p class="event_excerpt" v-html="event.excerpt"></p>
-                </div>
-
-                <div class="seemore_btn_box">
-                    <a target="_blank" :href="event.permalink" class="button-seemore cfa_btn">Read more</a>
-                </div>
-            </div>
-            <!-- // Event Card -->
-
-            <div v-if="latestEvents.length === 0" class="cfa_alert">No events are found.</div>
-        </div>
-    </div> <!-- // Latest Events -->
-
     <!-- Previos events -->
     <div class="previous_events">
-        <h3 class="head3"><b>Previous</b> Events</h3>
-
         <div class="years_filter">
             <div class="years_btns">
                 <?php
@@ -121,4 +89,3 @@
         </svg>
     </div>
 </div>
-<?php get_footer(); ?>

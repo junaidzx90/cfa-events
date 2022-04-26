@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'CFA_EVENTS_VERSION', '1.0.0' );
+define( 'CFA_EVENTS_VERSION', '1.0.1' );
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -48,15 +48,18 @@ function get_active_event($event_id){
 	}
 
 	$eventDate = get_post_meta($event_id, '__event_date', true); // date from input
+	$start_time = get_post_meta($event_id, '__event_start_time', true); // date from input
 	$end_time = get_post_meta($event_id, '__event_end_time', true); // time from input
-	$end_time = date("h:ia", strtotime($end_time)); // Time format
 
-	$todayWithTime = strtotime(date("Y-m-d h:ia")); // Today timestamps
+	if($eventDate && $end_time && $start_time){
+		$end_time = date("h:ia", strtotime($end_time)); // Time format
+		$todayWithTime = strtotime(date("Y-m-d h:ia")); // Today timestamps
 
-	$eventDate = strtotime($eventDate." ".$end_time); // Event end datetimestamps
-
-	if($todayWithTime <= $eventDate){
-		return true;
+		$eventDate = strtotime($eventDate." ".$end_time); // Event end datetimestamps
+	
+		if($todayWithTime <= $eventDate){
+			return true;
+		}
 	}
 }
 

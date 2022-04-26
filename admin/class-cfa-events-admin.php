@@ -128,7 +128,7 @@ class Cfa_Events_Admin {
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'events' ),
 			'capability_type'    => 'post',
-			'has_archive'        => true,
+			'has_archive'        => false,
 			'hierarchical'       => false,
 			'menu_position'      => 45,
 			'menu_icon'      	 => 'dashicons-calendar-alt',
@@ -137,6 +137,11 @@ class Cfa_Events_Admin {
 		);
 		  
 		register_post_type( 'events', $args );
+
+		if(!get_option( 'cfa_events_permalinks_flush' )){
+			flush_rewrite_rules(false);
+			update_option( 'cfa_events_permalinks_flush', 1 );
+		}
 	}
 
 	// Add meta boxespostcustom
@@ -150,23 +155,24 @@ class Cfa_Events_Admin {
 		add_meta_box( 'eventendtime', "End time", [$this, 'event_end_meta_box'], 'events', 'side' );
 		add_meta_box( 'eventlocation', "Event location", [$this, 'event_location_meta_box'], 'events', 'side' );
 		add_meta_box( 'postimagediv', "Featured image", 'post_thumbnail_meta_box', 'events', 'side' );
+		add_meta_box( 'event_email', "Email template", [$this, 'post_event_email_meta_box'], 'events', 'advanced' );
 		add_meta_box( 'registrants', "Registrants", [$this, 'post_registrants_meta_box'], 'events', 'advanced' );
 	}
 
 	// Event date
 	function event_date_meta_box($post){
 		$date = get_post_meta($post->ID, "__event_date", true);
-		echo '<input required type="date" class="widefat" name="event_date" id="event_date" value="'.$date.'">';
+		echo '<input type="date" class="widefat" name="event_date" id="event_date" value="'.$date.'">';
 	}
 	// Start time
 	function event_start_meta_box($post){
 		$start_time = get_post_meta($post->ID, "__event_start_time", true);
-		echo '<input required type="time" class="widefat" name="event_start_time" id="event_start_time" value="'.$start_time.'">';
+		echo '<input type="time" class="widefat" name="event_start_time" id="event_start_time" value="'.$start_time.'">';
 	}
 	// End time
 	function event_end_meta_box($post){
 		$end_time = get_post_meta($post->ID, "__event_end_time", true);
-		echo '<input required type="time" class="widefat" name="event_end_time" id="event_end_time" value="'.$end_time.'">';
+		echo '<input type="time" class="widefat" name="event_end_time" id="event_end_time" value="'.$end_time.'">';
 	}
 	// Event location
 	function event_location_meta_box($post){
@@ -177,13 +183,51 @@ class Cfa_Events_Admin {
 			<table style="text-align: left;">
 				<tr>
 					<th><label for="location_addr">Address</label></th>
-					<td><input required type="text" name="location_addr" id="location_addr" value="<?php echo $location ?>"></td>
+					<td><input type="text" name="location_addr" id="location_addr" value="<?php echo $location ?>"></td>
 				</tr>
 				<tr>
 					<th><label for="location_url">Google map URL</label></th>
-					<td><input required type="text" placeholder="Map URL" name="location_url" id="location_url" value="<?php echo $location_url ?>"></td>
+					<td><input type="text" placeholder="Map URL" name="location_url" id="location_url" value="<?php echo $location_url ?>"></td>
 				</tr>
 			</table>
+		</div>
+		<?php
+	}
+
+	// Email template
+	function post_event_email_meta_box($post){
+		$eml_title = sanitize_text_field( get_post_meta($post->ID, 'cfa_email_title' , true) );
+		$email_subject = sanitize_text_field( get_post_meta($post->ID, 'cfa_email_subject' , true) );
+		$email_contents = get_post_meta($post->ID, 'cfa_email_contents' , true);
+		$email_footer = get_post_meta($post->ID, 'cfa_email_footer' , true);
+		?>
+		<div class="cfa_email_setting">
+			<div class="cfa_eml_input">
+				<label for="">Email title</label>
+				<input type="text" class="widefat" placeholder="Title" value="<?php echo $eml_title ?>" name="cfa_email_title" id="cfa_email_title">
+			</div>
+			<div class="cfa_eml_input">
+				<label for="">Email subject</label>
+				<input type="text" class="widefat" placeholder="Subject" value="<?php echo $email_subject ?>" name="cfa_email_subject" id="cfa_email_subject">
+			</div>
+			<div class="cfa_eml_input">
+				<label for="">Email contents</label>
+				<?php
+				wp_editor( $email_contents, 'cfa_email_contents', [
+					'media_buttons' => false,
+					'editor_height' => 200,
+				] );
+				?>
+			</div>
+			<div class="cfa_eml_input">
+				<label for="">Email footer</label>
+				<?php
+				wp_editor( $email_footer, 'cfa_email_footer', [
+					'media_buttons' => false,
+					'editor_height' => 100,
+				] );
+				?>
+			</div>
 		</div>
 		<?php
 	}
@@ -334,13 +378,29 @@ class Cfa_Events_Admin {
 			$longitude = $_POST['location_url'];
 			update_post_meta( $post_id, '__event_location_url', $longitude );
 		}
+
+		if(isset($_POST['cfa_email_title'])){
+			$email_title = sanitize_text_field($_POST['cfa_email_title']);
+			update_post_meta( $post_id, 'cfa_email_title', $email_title );
+		}
+		if(isset($_POST['cfa_email_subject'])){
+			$email_subject = sanitize_text_field($_POST['cfa_email_subject']);
+			update_post_meta( $post_id, 'cfa_email_subject', $email_subject );
+		}
+		if(isset($_POST['cfa_email_contents'])){
+			$email_contents = $_POST['cfa_email_contents'];
+			update_post_meta( $post_id, 'cfa_email_contents', $email_contents );
+		}
+		if(isset($_POST['cfa_email_footer'])){
+			$email_footer = $_POST['cfa_email_footer'];
+			update_post_meta( $post_id, 'cfa_email_footer', $email_footer );
+		}
 	}
 
 	// menupage
 	function admin_menupage(){
 		add_submenu_page( 'edit.php?post_type=events', 'Settings', 'Settings', 'manage_options', 'cfa-setting', [$this, 'menupage_callback'] );
 		add_settings_section( 'cfa_general_opt_section', '', '', 'cfa_general_opt_page' );
-		add_settings_section( 'cfa_email_opt_section', '', '', 'cfa_email_opt_page' );
 		add_settings_section( 'cfa_styles_opt_section', '', '', 'cfa_styles_opt_page' );
 		// Enable/Disable latest events
 		add_settings_field( 'enable__disable_latest_events', 'Enable/Disable latest events', [$this, 'enable__disable_latest_events_cb'], 'cfa_general_opt_page','cfa_general_opt_section' );
@@ -351,19 +411,6 @@ class Cfa_Events_Admin {
 		// Fallback event thumbnail
 		add_settings_field( 'cfa_fallback_thumb', 'Fallback event thumbnail', [$this, 'cfa_fallback_thumb_cb'], 'cfa_general_opt_page','cfa_general_opt_section' );
 		register_setting( 'cfa_general_opt_section', 'cfa_fallback_thumb' );
-
-		// Email title
-		add_settings_field( 'cfa_email_title', 'Email title', [$this, 'cfa_email_title_cb'], 'cfa_email_opt_page','cfa_email_opt_section' );
-		register_setting( 'cfa_email_opt_section', 'cfa_email_title' );
-		// Email subject
-		add_settings_field( 'cfa_email_subject', 'Email subject', [$this, 'cfa_email_subject_cb'], 'cfa_email_opt_page','cfa_email_opt_section' );
-		register_setting( 'cfa_email_opt_section', 'cfa_email_subject' );
-		// Email contents
-		add_settings_field( 'cfa_email_contents', 'Email contents', [$this, 'cfa_email_contents_cb'], 'cfa_email_opt_page','cfa_email_opt_section' );
-		register_setting( 'cfa_email_opt_section', 'cfa_email_contents' );
-		// Email footer
-		add_settings_field( 'cfa_email_footer', 'Email footer', [$this, 'cfa_email_footer_cb'], 'cfa_email_opt_page','cfa_email_opt_section' );
-		register_setting( 'cfa_email_opt_section', 'cfa_email_footer' );
 
 		// Static color
 		add_settings_field( 'cfa_static_color', 'Static color', [$this, 'cfa_static_color_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
@@ -410,26 +457,6 @@ class Cfa_Events_Admin {
 		echo '<input type="url" class="widefat" placeholder="Image URL" value="'.get_option('cfa_fallback_thumb').'" name="cfa_fallback_thumb" id="cfa_fallback_thumb">';
 	}
 
-	function cfa_email_title_cb(){
-		echo '<input type="text" required class="widefat" placeholder="Title" value="'.get_option('cfa_email_title').'" name="cfa_email_title" id="cfa_email_title">';
-	}
-	function cfa_email_subject_cb(){
-		echo '<input type="text" required class="widefat" placeholder="Subject" value="'.get_option('cfa_email_subject').'" name="cfa_email_subject" id="cfa_email_subject">';
-	}
-	function cfa_email_contents_cb(){
-		echo '<hr>';
-		wp_editor( get_option('cfa_email_contents'), 'cfa_email_contents', [
-			'media_buttons' => false,
-			'editor_height' => 200,
-		] );
-	}
-	function cfa_email_footer_cb(){
-		echo '<hr>';
-		wp_editor( get_option('cfa_email_footer'), 'cfa_email_footer', [
-			'media_buttons' => false,
-			'editor_height' => 100,
-		] );
-	}
 
 	function cfa_static_color_cb(){
 		echo '<input type="text" name="cfa_static_color" id="cfa_static_color" data-default-color="#3E3F94" value="'.((get_option('cfa_static_color')) ? get_option('cfa_static_color') : '#3E3F94').'">';

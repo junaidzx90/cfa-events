@@ -8,9 +8,6 @@ if(isset($_GET['post_type']) && $_GET['post_type'] === 'events' && isset($_GET['
         case 'general':
             $current_tab = 'general';
             break;
-        case 'email':
-            $current_tab = 'email';
-            break;
         case 'styles':
             $current_tab = 'styles';
             break;
@@ -23,7 +20,6 @@ if(isset($_GET['post_type']) && $_GET['post_type'] === 'events' && isset($_GET['
 <div class="cfa_setting_page">
     <div class="settings__tab">
         <a href="?post_type=events&page=cfa-setting&tab=general" class="tablinks <?php echo (($current_tab === 'general') ? 'active': '') ?>">General</a>
-        <a href="?post_type=events&page=cfa-setting&tab=email" class="tablinks <?php echo (($current_tab === 'email') ? 'active': '') ?>">Email</a>
         <a href="?post_type=events&page=cfa-setting&tab=styles" class="tablinks <?php echo (($current_tab === 'styles') ? 'active': '') ?>">Styles</a>
     </div>
 
@@ -38,17 +34,7 @@ if(isset($_GET['post_type']) && $_GET['post_type'] === 'events' && isset($_GET['
             </form>
         </div>
     </div>
-    <div id="email-settings" class="tabcontent <?php echo (($current_tab === 'email') ? 'active': '') ?>">
-        <div class="cfa-settings">
-            <form style="width: 75%;" method="post" action="options.php">
-                <?php
-                settings_fields( 'cfa_email_opt_section' );
-                do_settings_sections('cfa_email_opt_page');
-                echo get_submit_button( 'Save Changes', 'secondary', 'save-cfa-setting' );
-                ?>
-            </form>
-        </div>
-    </div>
+    
     <div id="styles-settings" class="tabcontent <?php echo (($current_tab === 'styles') ? 'active': '') ?>">
         <div class="cfa-settings">
             <form style="width: 75%;" method="post" action="options.php">

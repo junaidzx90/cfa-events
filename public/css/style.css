@@ -1,10 +1,3 @@
-#cfa_events {
-  padding: 30px 0;
-  max-width: 1080px;
-  width: 100%;
-  margin: auto;
-  margin-bottom: 30px;
-}
 #cfa_events h3.head3 {
   padding: 20px 0px;
   font-size: 28px;
@@ -73,17 +66,31 @@
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
 }
-#cfa_events .events_wrapper {
+#cfa_events .cfaLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+  background-color: rgba(177, 177, 177, 0.5647058824);
+  z-index: 999999;
+}
+
+.events_wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
   grid-gap: 20px;
 }
 @media only screen and (max-width: 480px) {
-  #cfa_events .events_wrapper {
+  .events_wrapper {
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
   }
 }
-#cfa_events .events_wrapper .event_card {
+.events_wrapper .event_card {
   background: #fff;
   -webkit-box-shadow: 1px 1px 4px -1px black;
   box-shadow: 1px 1px 4px -1px black;
@@ -96,41 +103,42 @@
   display: flex;
   flex-direction: column;
 }
-#cfa_events .events_wrapper .event_card .event_thumbnail {
+.events_wrapper .event_card .event_thumbnail {
   max-height: 200px !important;
   overflow: hidden;
 }
-#cfa_events .events_wrapper .event_card .event_thumbnail img {
+.events_wrapper .event_card .event_thumbnail img {
   min-width: 100%;
 }
-#cfa_events .events_wrapper .event_card .event_contents {
+.events_wrapper .event_card .event_contents {
   padding: 30px;
   margin-bottom: auto;
 }
-#cfa_events .events_wrapper .event_card .event_contents h4.event__title {
+.events_wrapper .event_card .event_contents h4.event__title {
   font-weight: 700;
   font-size: var(--cfa_card_title_font_size);
+  line-height: 26px;
   padding-bottom: 5px;
   color: var(--cfa_title_color);
 }
-#cfa_events .events_wrapper .event_card .event_contents p.event__date {
+.events_wrapper .event_card .event_contents p.event__date {
   font-size: var(--cfa_date_font_size);
   font-weight: 500;
   color: var(--cfa_date_color);
   margin-bottom: 15px;
   padding: 0;
 }
-#cfa_events .events_wrapper .event_card .event_contents p.event_excerpt {
+.events_wrapper .event_card .event_contents p.event_excerpt {
   margin: 0;
   font-size: var(--cfa_content_font_size);
   line-height: 22px;
   color: var(--cfa_content_text_color);
 }
-#cfa_events .events_wrapper .event_card .seemore_btn_box {
+.events_wrapper .event_card .seemore_btn_box {
   padding: 0 30px 30px;
   text-align: center;
 }
-#cfa_events .events_wrapper .event_card .seemore_btn_box a.cfa_btn {
+.events_wrapper .event_card .seemore_btn_box a.cfa_btn {
   background-color: var(--cfa_static_color);
   border-radius: 0;
   color: var(--cfa_static_text_color);
@@ -139,7 +147,7 @@
   font-style: normal;
   font-size: 14px;
 }
-#cfa_events .events_wrapper .event_card .seemore_btn_box a.cfa_btn:hover {
+.events_wrapper .event_card .seemore_btn_box a.cfa_btn:hover {
   transition: 0.3s;
   background-color: var(--cfa_selected_color);
   color: var(--cfa_selected_text_color);
@@ -147,18 +155,6 @@
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
-}
-#cfa_events .cfaLoader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(2px);
-  background-color: rgba(177, 177, 177, 0.5647058824);
 }
 
 div#event_page {
