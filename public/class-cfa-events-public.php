@@ -186,7 +186,7 @@ class Cfa_Events_Public {
 
 		if(!empty($title)){
 			$template .= '<tr>';
-			$template .= '<td width="600" height="auto" bgcolor="#000" border="0" style="padding:36px 48px; display:block; margin: 0px auto;">';
+			$template .= '<td width="600" height="auto" bgcolor="#557da1" border="0" style="padding:36px 48px; display:block; margin: 0px auto;">';
 			// Heading
 			$template .= '<h1 style="color:#ffffff; font-family:&quot; Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; font-size:30px; line-height:150%; font-weight:300; margin:0; text-align:left;">'.$title.'</h1>';
 			$template .= '</td>';
