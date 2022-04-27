@@ -400,17 +400,17 @@ class Cfa_Events_Admin {
 	// menupage
 	function admin_menupage(){
 		add_submenu_page( 'edit.php?post_type=events', 'Settings', 'Settings', 'manage_options', 'cfa-setting', [$this, 'menupage_callback'] );
-		add_settings_section( 'cfa_general_opt_section', '', '', 'cfa_general_opt_page' );
+		add_settings_section( 'cfa_events_general_opt_section', '', '', 'cfa_events_general_opt_page' );
 		add_settings_section( 'cfa_styles_opt_section', '', '', 'cfa_styles_opt_page' );
-		// Enable/Disable latest events
-		add_settings_field( 'enable__disable_latest_events', 'Enable/Disable latest events', [$this, 'enable__disable_latest_events_cb'], 'cfa_general_opt_page','cfa_general_opt_section' );
-		register_setting( 'cfa_general_opt_section', 'enable__disable_latest_events' );
+		// Shortcodes
+		add_settings_field( 'events_shortcode', 'Shortcodes', [$this, 'events_shortcode_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
+		register_setting( 'cfa_events_general_opt_section', 'events_shortcode' );
 		// Events perpage
-		add_settings_field( 'events_perpage', 'Events per page', [$this, 'events_perpage_cb'], 'cfa_general_opt_page','cfa_general_opt_section' );
-		register_setting( 'cfa_general_opt_section', 'events_perpage' );
+		add_settings_field( 'events_perpage', 'Events per page', [$this, 'events_perpage_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
+		register_setting( 'cfa_events_general_opt_section', 'events_perpage' );
 		// Fallback event thumbnail
-		add_settings_field( 'cfa_fallback_thumb', 'Fallback event thumbnail', [$this, 'cfa_fallback_thumb_cb'], 'cfa_general_opt_page','cfa_general_opt_section' );
-		register_setting( 'cfa_general_opt_section', 'cfa_fallback_thumb' );
+		add_settings_field( 'cfa_fallback_thumb', 'Fallback event thumbnail', [$this, 'cfa_fallback_thumb_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
+		register_setting( 'cfa_events_general_opt_section', 'cfa_fallback_thumb' );
 
 		// Static color
 		add_settings_field( 'cfa_static_color', 'Static color', [$this, 'cfa_static_color_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
@@ -447,11 +447,11 @@ class Cfa_Events_Admin {
 		register_setting( 'cfa_styles_opt_section', 'cfa_content_font_size' );
 	}
 
-	function enable__disable_latest_events_cb(){
-		echo '<input type="checkbox" '.((get_option('enable__disable_latest_events', 'on') === 'on') ? 'checked' : '').' name="enable__disable_latest_events" id="enable__disable_latest_events">';
+	function events_shortcode_cb(){
+		echo '<input type="text" readonly value="[latest_events]"> <input type="text" readonly value="[previous_events]">';
 	}
 	function events_perpage_cb(){
-		echo '<input type="number" placeholder="12" style="width: 60px;" min="1" oninput="this.value = Math.abs(this.value)" value="'.get_option('events_perpage').'" name="events_perpage" id="events_perpage">';
+		echo '<input type="number" placeholder="12" style="width: 60px;" min="1" oninput="this.value = ((this.value !== \'\') ? Math.abs(this.value) : \'\')" value="'.get_option('events_perpage').'" name="events_perpage" id="events_perpage">';
 	}
 	function cfa_fallback_thumb_cb(){
 		echo '<input type="url" class="widefat" placeholder="Image URL" value="'.get_option('cfa_fallback_thumb').'" name="cfa_fallback_thumb" id="cfa_fallback_thumb">';

@@ -27,8 +27,8 @@ if(isset($_GET['post_type']) && $_GET['post_type'] === 'events' && isset($_GET['
         <div class="cfa-settings">
             <form style="width: 75%;" method="post" action="options.php">
                 <?php
-                settings_fields( 'cfa_general_opt_section' );
-                do_settings_sections('cfa_general_opt_page');
+                settings_fields( 'cfa_events_general_opt_section' );
+                do_settings_sections('cfa_events_general_opt_page');
                 echo get_submit_button( 'Save Changes', 'secondary', 'save-cfa-setting' );
                 ?>
             </form>
