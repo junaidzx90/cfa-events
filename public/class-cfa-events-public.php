@@ -126,11 +126,15 @@ class Cfa_Events_Public {
 				--cfa_selected_text_color: <?php echo ((get_option('cfa_selected_text_color')) ? get_option('cfa_selected_text_color') : '#3E3F94') ?>;
 				--cfa_title_color: <?php echo ((get_option('cfa_title_color')) ? get_option('cfa_title_color') : '#333333') ?>;
 				--cfa_card_title_font_size: <?php echo ((get_option('cfa_card_title_font_size')) ? get_option('cfa_card_title_font_size').'px' : '18px') ?>;
+				--cfa_card_title_font_weight: <?php echo ((get_option('cfa_card_title_font_weight')) ? get_option('cfa_card_title_font_weight') : '700') ?>;
 				--cfa_single_title_font_size: <?php echo ((get_option('cfa_single_title_font_size')) ? get_option('cfa_single_title_font_size').'px' : '28px') ?>;
+				--cfa_single_title_font_weight: <?php echo ((get_option('cfa_single_title_font_weight')) ? get_option('cfa_single_title_font_weight') : '700') ?>;
 				--cfa_date_color: <?php echo ((get_option('cfa_date_color')) ? get_option('cfa_date_color') : '#E91934') ?>;
 				--cfa_date_font_size: <?php echo ((get_option('cfa_date_font_size')) ? get_option('cfa_date_font_size').'px' : '14px') ?>;
+				--cfa_date_font_weight: <?php echo ((get_option('cfa_date_font_weight')) ? get_option('cfa_date_font_weight') : '500') ?>;
 				--cfa_content_text_color: <?php echo ((get_option('cfa_content_text_color')) ? get_option('cfa_content_text_color') : '#646464') ?>;
 				--cfa_content_font_size: <?php echo ((get_option('cfa_content_font_size')) ? get_option('cfa_content_font_size').'px' : '16px') ?>;
+				--cfa_content_font_weight: <?php echo ((get_option('cfa_content_font_weight')) ? get_option('cfa_content_font_weight') : '100') ?>;
 			}
 		</style>
 		<?php
@@ -390,7 +394,9 @@ class Cfa_Events_Public {
 				}
 				$location = get_post_meta($event_id, '__event_location', true);
 				$thumbnail = ((get_the_post_thumbnail_url(  )) ? get_the_post_thumbnail_url(  ) : get_option('cfa_fallback_thumb') );
-				$excerpt = wp_trim_words(get_the_content(), 30);
+
+				$len = ((get_option('excerpt_length')) ? get_option('excerpt_length') : 10);
+				$excerpt = wp_trim_words(get_the_excerpt( get_post()->ID ), $len);
 				$permalink = get_the_permalink( get_post()->ID );
 
 				$event = array(

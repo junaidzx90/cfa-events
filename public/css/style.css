@@ -76,7 +76,6 @@
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(2px);
-  background-color: rgba(177, 177, 177, 0.5647058824);
   z-index: 999999;
 }
 
@@ -115,15 +114,15 @@
   margin-bottom: auto;
 }
 .events_wrapper .event_card .event_contents h4.event__title {
-  font-weight: 700;
+  font-weight: var(--cfa_card_title_font_weight);
   font-size: var(--cfa_card_title_font_size);
-  line-height: 26px;
+  line-height: 22px;
   padding-bottom: 5px;
   color: var(--cfa_title_color);
 }
 .events_wrapper .event_card .event_contents p.event__date {
   font-size: var(--cfa_date_font_size);
-  font-weight: 500;
+  font-weight: var(--cfa_date_font_weight);
   color: var(--cfa_date_color);
   margin-bottom: 15px;
   padding: 0;
@@ -133,6 +132,7 @@
   font-size: var(--cfa_content_font_size);
   line-height: 22px;
   color: var(--cfa_content_text_color);
+  font-weight: var(--cfa_content_font_weight);
 }
 .events_wrapper .event_card .seemore_btn_box {
   padding: 0 30px 30px;
@@ -178,7 +178,7 @@ div#event_page .cfa_alert p {
   color: #4d4d4d;
 }
 div#event_page h1.head1 {
-  font-weight: 700;
+  font-weight: var(--cfa_single_title_font_weight);
   font-size: var(--cfa_single_title_font_size);
   margin: 0;
   padding-bottom: 5px;
@@ -187,7 +187,7 @@ div#event_page h1.head1 {
 div#event_page p.event__date {
   color: var(--cfa_date_color);
   font-size: var(--cfa_date_font_size);
-  font-weight: 500;
+  font-weight: var(--cfa_date_font_weight);
   margin: 0;
 }
 div#event_page .event_thumbnail {
@@ -206,12 +206,14 @@ div#event_page .event_contents p {
   font-size: var(--cfa_content_font_size);
   line-height: 26px;
   color: var(--cfa_content_text_color);
+  font-weight: var(--cfa_content_font_weight);
 }
 div#event_page .event_contents div {
   margin: 0;
   font-size: var(--cfa_content_font_size);
   line-height: 26px;
   color: var(--cfa_content_text_color);
+  font-weight: var(--cfa_content_font_weight);
 }
 div#event_page .information_box {
   padding: 20px;

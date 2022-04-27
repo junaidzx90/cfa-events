@@ -82,7 +82,6 @@
         justify-content: center;
         align-items: center;
         backdrop-filter: blur(2px);
-        background-color: #b1b1b190;
         z-index: 999999;
     }
 }
@@ -118,15 +117,15 @@
             padding: 30px;
             margin-bottom: auto;
             h4.event__title {
-                font-weight: 700;
+                font-weight: var(--cfa_card_title_font_weight);
                 font-size: var(--cfa_card_title_font_size);
-                line-height: 26px;
+                line-height: 22px;
                 padding-bottom: 5px;
                 color: var(--cfa_title_color);
             }
             p.event__date {
                 font-size: var(--cfa_date_font_size);
-                font-weight: 500;
+                font-weight: var(--cfa_date_font_weight);
                 color: var(--cfa_date_color);
                 margin-bottom: 15px;
                 padding: 0;
@@ -136,6 +135,7 @@
                 font-size: var(--cfa_content_font_size);
                 line-height: 22px;
                 color: var(--cfa_content_text_color);
+                font-weight: var(--cfa_content_font_weight);
             }
         }
         .seemore_btn_box {
@@ -185,7 +185,7 @@ div#event_page {
     }
 
     h1.head1 {
-        font-weight: 700;
+        font-weight: var(--cfa_single_title_font_weight);
         font-size: var(--cfa_single_title_font_size);
         margin: 0;
         padding-bottom: 5px;
@@ -194,7 +194,7 @@ div#event_page {
     p.event__date {
         color: var(--cfa_date_color);
         font-size: var(--cfa_date_font_size);
-        font-weight: 500;
+        font-weight: var(--cfa_date_font_weight);
         margin: 0;
     }
     .event_thumbnail {
@@ -212,12 +212,14 @@ div#event_page {
             font-size: var(--cfa_content_font_size);
             line-height: 26px;
             color: var(--cfa_content_text_color);
+            font-weight: var(--cfa_content_font_weight);
         }
         div{
             margin: 0;
             font-size: var(--cfa_content_font_size);
             line-height: 26px; 
             color: var(--cfa_content_text_color);
+            font-weight: var(--cfa_content_font_weight);
         }
     }
     .information_box {

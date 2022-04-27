@@ -132,15 +132,15 @@ class Cfa_Events_Admin {
 			'hierarchical'       => false,
 			'menu_position'      => 45,
 			'menu_icon'      	 => 'dashicons-calendar-alt',
-			'supports'           => array( 'title', 'editor', 'thumbnail' ),
+			'supports'           => array( 'title', 'excerpt', 'editor', 'thumbnail' ),
 			'show_in_rest'       => false
 		);
 		  
 		register_post_type( 'events', $args );
 
-		if(!get_option( 'cfa_events_permalinks_flush' )){
+		if(get_option( 'cfa_events_permalinks_flush' ) !== '1'){
 			flush_rewrite_rules(false);
-			update_option( 'cfa_events_permalinks_flush', 1 );
+			update_option( 'cfa_events_permalinks_flush', '1' );
 		}
 	}
 
@@ -148,7 +148,7 @@ class Cfa_Events_Admin {
 	function events_post_type_metaboxes(){
 		global $wp_meta_boxes;
 		unset($wp_meta_boxes['events']);
-
+		add_meta_box( 'postexcerpt', "Excerpt", 'post_excerpt_meta_box', 'events', 'advanced' );
 		add_meta_box( 'submitdiv', "Publish", 'post_submit_meta_box', 'events', 'side' );
 		add_meta_box( 'eventdate', "Event date", [$this, 'event_date_meta_box'], 'events', 'side' );
 		add_meta_box( 'eventstarttime', "Start time", [$this, 'event_start_meta_box'], 'events', 'side' );
@@ -405,6 +405,9 @@ class Cfa_Events_Admin {
 		// Shortcodes
 		add_settings_field( 'events_shortcode', 'Shortcodes', [$this, 'events_shortcode_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
 		register_setting( 'cfa_events_general_opt_section', 'events_shortcode' );
+		// Excerpt length
+		add_settings_field( 'excerpt_length', 'Excerpt length', [$this, 'excerpt_length_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
+		register_setting( 'cfa_events_general_opt_section', 'excerpt_length' );
 		// Events perpage
 		add_settings_field( 'events_perpage', 'Events per page', [$this, 'events_perpage_cb'], 'cfa_events_general_opt_page','cfa_events_general_opt_section' );
 		register_setting( 'cfa_events_general_opt_section', 'events_perpage' );
@@ -430,25 +433,40 @@ class Cfa_Events_Admin {
 		// Title font size (Card)
 		add_settings_field( 'cfa_card_title_font_size', 'Title font size (Card)', [$this, 'cfa_card_title_font_size_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_card_title_font_size' );
+		// Title font weight (Card)
+		add_settings_field( 'cfa_card_title_font_weight', 'Title font weight (Card)', [$this, 'cfa_card_title_font_weight_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
+		register_setting( 'cfa_styles_opt_section', 'cfa_card_title_font_weight' );
 		// Title font size (Single page)
 		add_settings_field( 'cfa_single_title_font_size', 'Title font size (Single page)', [$this, 'cfa_single_title_font_size_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_single_title_font_size' );
+		// Title font weight (Single page)
+		add_settings_field( 'cfa_single_title_font_weight', 'Title font weight (Single page)', [$this, 'cfa_single_title_font_weight_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
+		register_setting( 'cfa_styles_opt_section', 'cfa_single_title_font_weight' );
 		// Date color
 		add_settings_field( 'cfa_date_color', 'Date color', [$this, 'cfa_date_color_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_date_color' );
 		// Date font size
 		add_settings_field( 'cfa_date_font_size', 'Date font size', [$this, 'cfa_date_font_size_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_date_font_size' );
+		// Date font weight
+		add_settings_field( 'cfa_date_font_weight', 'Date font weight', [$this, 'cfa_date_font_weight_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
+		register_setting( 'cfa_styles_opt_section', 'cfa_date_font_weight' );
 		// Content text color
 		add_settings_field( 'cfa_content_text_color', 'Content text color', [$this, 'cfa_content_text_color_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_content_text_color' );
 		// Content font size
 		add_settings_field( 'cfa_content_font_size', 'Content font size', [$this, 'cfa_content_font_size_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
 		register_setting( 'cfa_styles_opt_section', 'cfa_content_font_size' );
+		// Content font weight
+		add_settings_field( 'cfa_content_font_weight', 'Content font weight', [$this, 'cfa_content_font_weight_cb'], 'cfa_styles_opt_page','cfa_styles_opt_section' );
+		register_setting( 'cfa_styles_opt_section', 'cfa_content_font_weight' );
 	}
 
 	function events_shortcode_cb(){
 		echo '<input type="text" readonly value="[latest_events]"> <input type="text" readonly value="[previous_events]">';
+	}
+	function excerpt_length_cb(){
+		echo '<input type="number" placeholder="10 words" style="width: 100px;" min="10" oninput="this.value = ((this.value !== \'\') ? Math.abs(this.value) : \'\')" value="'.get_option('excerpt_length').'" name="excerpt_length" id="excerpt_length">';
 	}
 	function events_perpage_cb(){
 		echo '<input type="number" placeholder="12" style="width: 60px;" min="1" oninput="this.value = ((this.value !== \'\') ? Math.abs(this.value) : \'\')" value="'.get_option('events_perpage').'" name="events_perpage" id="events_perpage">';
@@ -476,8 +494,14 @@ class Cfa_Events_Admin {
 	function cfa_card_title_font_size_cb(){
 		echo '<input type="number" min="10" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')"name="cfa_card_title_font_size" placeholder="18px" value="'.get_option('cfa_card_title_font_size').'">';
 	}
+	function cfa_card_title_font_weight_cb(){
+		echo '<input type="number" min="100" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')"name="cfa_card_title_font_weight" placeholder="700" value="'.get_option('cfa_card_title_font_weight').'">';
+	}
 	function cfa_single_title_font_size_cb(){
 		echo '<input type="number" min="15" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_single_title_font_size" placeholder="28px" value="'.get_option('cfa_single_title_font_size').'">';
+	}
+	function cfa_single_title_font_weight_cb(){
+		echo '<input type="number" min="100" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_single_title_font_weight" placeholder="700" value="'.get_option('cfa_single_title_font_weight').'">';
 	}
 	function cfa_date_color_cb(){
 		echo '<input type="text" name="cfa_date_color" id="cfa_date_color" data-default-color="#E91934" value="'.((get_option('cfa_date_color')) ? get_option('cfa_date_color') : '#E91934').'">';
@@ -485,11 +509,17 @@ class Cfa_Events_Admin {
 	function cfa_date_font_size_cb(){
 		echo '<input type="number" min="8" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_date_font_size" placeholder="14px" value="'.get_option('cfa_date_font_size').'">';
 	}
+	function cfa_date_font_weight_cb(){
+		echo '<input type="number" min="100" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_date_font_weight" placeholder="500" value="'.get_option('cfa_date_font_weight').'">';
+	}
 	function cfa_content_text_color_cb(){
 		echo '<input type="text" name="cfa_content_text_color" id="cfa_content_text_color" data-default-color="#646464" value="'.((get_option('cfa_content_text_color')) ? get_option('cfa_content_text_color') : '#646464').'">';
 	}
 	function cfa_content_font_size_cb(){
 		echo '<input type="number" min="10" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_content_font_size" placeholder="16px" value="'.get_option('cfa_content_font_size').'">';
+	}
+	function cfa_content_font_weight_cb(){
+		echo '<input type="number" min="100" oninput="((this.value) ? this.value = Math.abs(this.value) : \'\')" name="cfa_content_font_weight" placeholder="100" value="'.get_option('cfa_content_font_weight').'">';
 	}
 
 

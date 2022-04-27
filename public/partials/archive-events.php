@@ -33,10 +33,12 @@
                 if($events){
                     foreach($events as $event){
                         $date = get_post_meta($event->ID, '__event_date', true);
-                        $date = date("j F, Y", strtotime($date));
+                        if($date){
+                            $date = date("j F, Y", strtotime($date));
 
-                        $year = explode(', ', $date)[1];
-                        $years[$year] = $year;
+                            $year = explode(', ', $date)[1];
+                            $years[$year] = $year;
+                        }
                     }
                 }
 

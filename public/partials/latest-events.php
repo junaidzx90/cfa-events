@@ -4,8 +4,10 @@ $args2 = array(
     'post_type' => 'events',
     'post_status' => 'publish',
     'numberposts' => 3,
-    'orderby' => 'date',
-    'order' => 'DESC'
+    'meta_key' => '__event_date',
+    'orderby' => 'meta_value',
+    'meta_type' => 'DATE',
+    'order' => 'ASC',
 );
 
 $events = get_posts( $args2 );
@@ -19,7 +21,8 @@ if($events){
         }
         $location = get_post_meta($event_id, '__event_location', true);
         $thumbnail = ((get_the_post_thumbnail_url( $event_id )) ? get_the_post_thumbnail_url( $event_id ) : get_option('cfa_fallback_thumb') );
-        $excerpt = wp_trim_words($event->post_content, 30);
+        $len = ((get_option('excerpt_length')) ? get_option('excerpt_length') : 10);
+        $excerpt = wp_trim_words(get_the_excerpt( $event_id ), $len);
         $permalink = get_the_permalink( $event->ID );
 
         $eventArr = array(
