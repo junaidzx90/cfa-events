@@ -14,7 +14,9 @@ if($events){
         $event_id = $event->ID;
         $event_title = $event->post_title;
         $event_date = get_post_meta($event_id, '__event_date', true);
-        $event_date = date("j F, Y", strtotime($event_date));
+        if($event_date){
+            $event_date = date("j F, Y", strtotime($event_date));
+        }
         $location = get_post_meta($event_id, '__event_location', true);
         $thumbnail = ((get_the_post_thumbnail_url( $event_id )) ? get_the_post_thumbnail_url( $event_id ) : get_option('cfa_fallback_thumb') );
         $excerpt = wp_trim_words($event->post_content, 30);
@@ -51,7 +53,7 @@ if(sizeof($latestEvents)){
 
                     <div class="event_contents">
                         <h4 class="event__title"><?php echo $event['title'] ?></h4>
-                        <p class="event__date"><?php echo $event['date'] ?> | <?php echo $event['location'] ?></p>
+                        <p class="event__date"><?php echo $event['date'] ?> <?php echo (($event['date'] !== "" && $event['location'] !== "") ? '|': '') ?> <?php echo $event['location'] ?></p>
                         <p class="event_excerpt"><?php echo $event['excerpt'] ?></p>
                     </div>
 

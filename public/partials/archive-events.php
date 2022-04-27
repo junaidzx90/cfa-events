@@ -60,7 +60,7 @@
 
                 <div class="event_contents">
                     <h4 class="event__title">{{event.title}}</h4>
-                    <p class="event__date">{{event.date}} | {{event.location}}</p>
+                    <p class="event__date">{{event.date}} <span v-show="event.location.length > 0 && event.date.length > 0">|</span> {{event.location}}</p>
                     <p class="event_excerpt" v-html="event.excerpt"></p>
                 </div>
 

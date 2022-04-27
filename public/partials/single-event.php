@@ -39,7 +39,7 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
     <p class="event__date"><?php echo $date.(($event_location && $date) ? ' | ' : '').$event_location ?></p>
 
     <div class="event_thumbnail">
-        <?php echo the_post_thumbnail( 'large' ) ?>
+        <?php echo ((get_the_post_thumbnail_url()) ? the_post_thumbnail( 'large' ) : '<img src="'.get_option('cfa_fallback_thumb').'" alt="thumbnail">') ?>
     </div>
 
     <div class="event_contents">

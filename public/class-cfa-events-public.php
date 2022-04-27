@@ -385,7 +385,9 @@ class Cfa_Events_Public {
 				$event_id = get_post()->ID;
 				$post_title = get_the_title(  );
 				$event_date = get_post_meta($event_id, '__event_date', true);
-				$event_date = date("j F, Y", strtotime($event_date));
+				if($event_date){
+					$event_date = date("j F, Y", strtotime($event_date));
+				}
 				$location = get_post_meta($event_id, '__event_location', true);
 				$thumbnail = ((get_the_post_thumbnail_url(  )) ? get_the_post_thumbnail_url(  ) : get_option('cfa_fallback_thumb') );
 				$excerpt = wp_trim_words(get_the_content(), 30);
@@ -395,7 +397,7 @@ class Cfa_Events_Public {
 					'event_id' => $event_id,
 					'title' => $post_title,
 					'thumbnail' => $thumbnail,
-					'date' => $event_date,
+					'date' => (($event_date) ? $event_date : ''),
 					'location' => $location,
 					'excerpt' => $excerpt,
 					'permalink' => $permalink
