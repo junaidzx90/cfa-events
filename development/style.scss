@@ -87,12 +87,10 @@
 }
 
 .events_wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
-    grid-gap: 20px;
-    @media only screen and (max-width: 480px) {
-        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-    }
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
     .event_card {
         background: #fff;
         -webkit-box-shadow: 1px 1px 4px -1px black;
@@ -105,11 +103,20 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        .event_thumbnail {
-            max-height: 200px !important;
+        width: calc(33% - 11px);
+        @media only screen and (max-width: 768px) {
+            width: calc(50% - 11px);
+        }
+        @media only screen and (max-width: 480px) {
+            width: 100%;
+        }
+        .event_thumbnail {    
+            display: flex;
+            max-height: 250px !important;
             overflow: hidden;
             img {
                 min-width: 100%;
+                aspect-ratio: 4 / 3;
             }
         }
        
@@ -165,7 +172,7 @@
 
 // Single page
 div#event_page {
-    padding: 30px 0;
+    padding: 30px 12px;
     max-width: 1080px;
     margin: auto;
     margin-bottom: 30px;
@@ -223,12 +230,22 @@ div#event_page {
         }
     }
     .information_box {
-        padding: 20px;
-        border: 1px solid #afafaf;
+        padding: 12px 0;
+        border-top: 1px solid #afafaf;
+        border-bottom: 1px solid #afafaf;
+        margin: 50px 0;
+        .location{
+            a{
+                text-decoration: underline;
+            }
+        }
         p{
             margin: 0;
-            line-height: 22px;
+            line-height: 28px;
             padding: 0;
+            strong{
+                color: #000;
+            }
         }
         .calendars {
             margin-top: 20px;
@@ -245,6 +262,9 @@ div#event_page {
                 text-align: center;
                 line-height: 43px;
             }
+            a{
+                text-decoration: underline;
+            }
         }
     }
     .event_registration_form {
@@ -253,13 +273,16 @@ div#event_page {
         padding: 30px;
         h3.head3 {
             font-size: 26px;
+            strong{
+                font-weight: 900;
+            }
         }
         form{
             text-align: right;
             .reg_inputs {
-                padding: 26px 0;
+                padding: 30px 0 0;
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(32%, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(31%, 1fr));
                 grid-gap: 20px;
                 input{
                     all: unset;
@@ -271,29 +294,61 @@ div#event_page {
                     background: #fff;
                     color: #7d8994;
                     font-size: 16px;
+                    height: 26px;
+                }
+                input.event-join-btn {
+                    background-color: #3E3F94;
+                    padding: 5px 20px;
+                    color: #fff;
+                    cursor: pointer;
+                    border: none;
+                    border-radius: 0px;
+                    height: auto;
+                }
+                input.event-join-btn:hover{
+                    transition: .3s;
+                    -webkit-transition: .3s;
+                    -moz-transition: .3s;
+                    -ms-transition: .3s;
+                    -o-transition: .3s;
+                    background-color: transparent;
+                    color: #3E3F94;
+                }
+                input:disabled {
+                    opacity: 0.5 !important;
+                    pointer-events: none;
                 }
             }
-            input.event-join-btn {
-                background-color: #3E3F94;
-                padding: 10px 20px;
-                color: #fff;
-                cursor: pointer;
-                border: none;
-                border-radius: 0px;
-            }
-            input.event-join-btn:hover{
-                transition: .3s;
-                -webkit-transition: .3s;
-                -moz-transition: .3s;
-                -ms-transition: .3s;
-                -o-transition: .3s;
-                opacity: .5;
-            }
-            input:disabled {
-                opacity: 0.5 !important;
-                pointer-events: none;
+        }
+
+        .submission-alert{
+            p{
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
             }
         }
     }
+}
 
+.noupcommingevents_found {
+    padding: 50px;
+    text-align: center;
+    .cfa_alert.dangerAlert {
+        display: inline-flex;
+        width: fit-content;
+        text-align: left;
+        gap: 10px;
+        padding: 5px 12px;
+        background-color: #8FD9F9;
+        min-width: 36%;
+        svg{
+            margin-top: 3px;
+        }
+        .alert-contents p {
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+    }
 }

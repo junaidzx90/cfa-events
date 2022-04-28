@@ -62,12 +62,12 @@
 
                 <div class="event_contents">
                     <h4 class="event__title">{{event.title}}</h4>
-                    <p class="event__date">{{event.date}} <span v-show="event.location.length > 0 && event.date.length > 0">|</span> {{event.location}}</p>
+                    <p class="event__date">{{event.date}} <span v-show="event.venue.length > 0 && event.date.length > 0">|</span> {{event.venue}}</p>
                     <p class="event_excerpt" v-html="event.excerpt"></p>
                 </div>
 
                 <div class="seemore_btn_box">
-                    <a target="_blank" :href="event.permalink" class="button-seemore cfa_btn">Read more</a>
+                    <a :href="event.permalink" class="button-seemore cfa_btn">Read More</a>
                 </div>
             </div>
             <!-- // Event Card -->
@@ -75,7 +75,7 @@
         </div>
         
         <div v-if="max_pages > currentPage" class="loadmore_box">
-            <button @click="loadmore_events()" class="loadmore_events">Load more</button>
+            <button @click="loadmore_events()" class="loadmore_events">Load More</button>
         </div>
     </div> <!-- //Previos events -->
 

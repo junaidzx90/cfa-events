@@ -34,6 +34,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Company</th>
                     <th>Registered</th>
                 </tr>
             </thead>
@@ -48,6 +49,7 @@
                             <td><?php echo $registrant->name ?></td>
                             <td><?php echo $registrant->email ?></td>
                             <td><?php echo $registrant->phone ?></td>
+                            <td><?php echo $registrant->company ?></td>
                             <td><?php echo date("F j, Y", strtotime($registrant->created)) ?></td>
                         </tr>
                         <?php

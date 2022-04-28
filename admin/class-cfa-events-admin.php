@@ -148,12 +148,10 @@ class Cfa_Events_Admin {
 	function events_post_type_metaboxes(){
 		global $wp_meta_boxes;
 		unset($wp_meta_boxes['events']);
-		add_meta_box( 'postexcerpt', "Excerpt", 'post_excerpt_meta_box', 'events', 'advanced' );
 		add_meta_box( 'submitdiv', "Publish", 'post_submit_meta_box', 'events', 'side' );
+		add_meta_box( 'postexcerpt', "Excerpt", 'post_excerpt_meta_box', 'events', 'advanced', 'high' );
 		add_meta_box( 'eventdate', "Event date", [$this, 'event_date_meta_box'], 'events', 'side' );
-		add_meta_box( 'eventstarttime', "Start time", [$this, 'event_start_meta_box'], 'events', 'side' );
-		add_meta_box( 'eventendtime', "End time", [$this, 'event_end_meta_box'], 'events', 'side' );
-		add_meta_box( 'eventlocation', "Event location", [$this, 'event_location_meta_box'], 'events', 'side' );
+		add_meta_box( 'eventmetadata', "Event Info", [$this, 'event_metadata_meta_box'], 'events', 'side' );
 		add_meta_box( 'postimagediv', "Featured image", 'post_thumbnail_meta_box', 'events', 'side' );
 		add_meta_box( 'event_email', "Email template", [$this, 'post_event_email_meta_box'], 'events', 'advanced' );
 		add_meta_box( 'registrants', "Registrants", [$this, 'post_registrants_meta_box'], 'events', 'advanced' );
@@ -164,30 +162,36 @@ class Cfa_Events_Admin {
 		$date = get_post_meta($post->ID, "__event_date", true);
 		echo '<input type="date" class="widefat" name="event_date" id="event_date" value="'.$date.'">';
 	}
-	// Start time
-	function event_start_meta_box($post){
-		$start_time = get_post_meta($post->ID, "__event_start_time", true);
-		echo '<input type="time" class="widefat" name="event_start_time" id="event_start_time" value="'.$start_time.'">';
-	}
-	// End time
-	function event_end_meta_box($post){
-		$end_time = get_post_meta($post->ID, "__event_end_time", true);
-		echo '<input type="time" class="widefat" name="event_end_time" id="event_end_time" value="'.$end_time.'">';
-	}
-	// Event location
-	function event_location_meta_box($post){
+	
+	// Event Info
+	function event_metadata_meta_box($post){
 		$location = get_post_meta($post->ID, "__event_location", true);
 		$location_url = get_post_meta($post->ID, "__event_location_url", true);
+		$venue_info = get_post_meta($post->ID, "__event_venue_info", true);
+		$start_time = get_post_meta($post->ID, "__event_start_time", true);
+		$end_time = get_post_meta($post->ID, "__event_end_time", true);
 		?>
-		<div class="location_box">
+		<div class="event_metadata">
 			<table style="text-align: left;">
 				<tr>
+					<th><label for="event_start_time">Start Time</label></th>
+					<td><input type="time" class="widefat" name="event_start_time" id="event_start_time" value="<?php  echo $start_time ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="event_end_time">End Time</label></th>
+					<td><input type="time" class="widefat" name="event_end_time" id="event_end_time" value="<?php  echo $end_time ?>"></td>
+				</tr>
+				<tr>
+					<th><label for="venue_info">Venue</label></th>
+					<td><input type="text" class="widefat" name="venue_info" id="venue_info" value="<?php echo $venue_info ?>"></td>
+				</tr>
+				<tr>
 					<th><label for="location_addr">Address</label></th>
-					<td><input type="text" name="location_addr" id="location_addr" value="<?php echo $location ?>"></td>
+					<td><input type="text" class="widefat" name="location_addr" id="location_addr" value="<?php echo $location ?>"></td>
 				</tr>
 				<tr>
 					<th><label for="location_url">Google map URL</label></th>
-					<td><input type="text" placeholder="Map URL" name="location_url" id="location_url" value="<?php echo $location_url ?>"></td>
+					<td><input type="text" class="widefat" placeholder="Map URL" name="location_url" id="location_url" value="<?php echo $location_url ?>"></td>
 				</tr>
 			</table>
 		</div>
@@ -260,7 +264,9 @@ class Cfa_Events_Admin {
 		switch ($column_id) {
 			case 'event_date':
 				$cfa_date = get_post_meta($post_id, '__event_date', true);
-				echo date("F j, Y", strtotime($cfa_date));
+				if($cfa_date){
+					echo date("F j, Y", strtotime($cfa_date));
+				}
 				break;
 			case 'durations':
 				
@@ -371,12 +377,16 @@ class Cfa_Events_Admin {
 			update_post_meta( $post_id, '__event_end_time', $end_time );
 		}
 		if(isset($_POST['location_addr'])){
-			$location = $_POST['location_addr'];
+			$location = sanitize_text_field( $_POST['location_addr'] );
 			update_post_meta( $post_id, '__event_location', $location );
 		}
 		if(isset($_POST['location_url'])){
 			$longitude = $_POST['location_url'];
 			update_post_meta( $post_id, '__event_location_url', $longitude );
+		}
+		if(isset($_POST['venue_info'])){
+			$venue_info = sanitize_text_field( $_POST['venue_info'] );
+			update_post_meta( $post_id, '__event_venue_info', $venue_info );
 		}
 
 		if(isset($_POST['cfa_email_title'])){
@@ -463,7 +473,7 @@ class Cfa_Events_Admin {
 	}
 
 	function events_shortcode_cb(){
-		echo '<input type="text" readonly value="[latest_events]"> <input type="text" readonly value="[previous_events]">';
+		echo '<input type="text" style="width: 130px; text-align: center;" readonly value="[latest_events]"> <input type="text" style="width: 130px; text-align: center;" readonly value="[previous_events]"> <input type="text" style="width: 130px; text-align: center;" readonly value="[future_events]">';
 	}
 	function excerpt_length_cb(){
 		echo '<input type="number" placeholder="10 words" style="width: 100px;" min="10" oninput="this.value = ((this.value !== \'\') ? Math.abs(this.value) : \'\')" value="'.get_option('excerpt_length').'" name="excerpt_length" id="excerpt_length">';
@@ -543,7 +553,7 @@ class Cfa_Events_Admin {
 				$f = fopen('php://memory', 'w'); 
 				 
 				// Set column headers 
-				$fields = array('Name', 'Email', 'Phone', 'Registered'); 
+				$fields = array('Name', 'Email', 'Phone', 'Company', 'Registered'); 
 				fputcsv($f, $fields, $delimiter); 
 				 
 				// Output each row of the data, format line as csv and write to file pointer 
@@ -553,6 +563,7 @@ class Cfa_Events_Admin {
 						$registrant->name, 
 						$registrant->email, 
 						$registrant->phone, 
+						$registrant->company,
 						date("F j, Y g:ia", strtotime($registrant->created))
 					); 
 					fputcsv($f, $lineData, $delimiter);

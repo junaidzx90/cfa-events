@@ -57,6 +57,7 @@ class Cfa_Events_Public {
 		$this->version = $version;
 
 		add_shortcode( 'latest_events', [$this, 'latest_events'] );
+		add_shortcode( 'future_events', [$this, 'future_events'] );
 		add_shortcode( 'previous_events', [$this, 'previous_events'] );
 	}
 
@@ -80,7 +81,12 @@ class Cfa_Events_Public {
 		 */
 		global $post;
 		
-		if ( (is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'latest_events') || has_shortcode( $post->post_content, 'previous_events') ) || is_singular( 'events' ) ) {
+		if ( (is_a( $post, 'WP_Post' ) && ( 
+			has_shortcode( $post->post_content, 'latest_events') || 
+			has_shortcode( $post->post_content, 'previous_events') || 
+			has_shortcode( $post->post_content, 'future_events')
+		)) || is_singular( 'events' ) || is_admin(  ) 
+		) {
 			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/style.css', array(), $this->version, 'all' );
 		}
 	}
@@ -106,7 +112,11 @@ class Cfa_Events_Public {
 
 		global $post;
 
-		if (!is_admin(  ) && (is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'latest_events') || has_shortcode( $post->post_content, 'previous_events') ) || is_singular( 'events' ) ) {
+		if (!is_admin(  ) && (is_a( $post, 'WP_Post' ) && ( 
+			has_shortcode( $post->post_content, 'latest_events') || 
+			has_shortcode( $post->post_content, 'previous_events') || 
+			has_shortcode( $post->post_content, 'future_events')
+		)) || is_singular( 'events' )  ) {
 			wp_enqueue_script( 'cfavue', plugin_dir_url( __FILE__ ) . 'js/vue.min.js', array(  ), $this->version, false );
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/index.js', array( 'jquery', 'cfavue' ), $this->version, true );
 			wp_localize_script( $this->plugin_name, 'cfa_ajax', array(
@@ -143,6 +153,14 @@ class Cfa_Events_Public {
 	function latest_events(){
 		ob_start();
 		require_once plugin_dir_path( __FILE__ )."partials/latest-events.php";
+		$output = ob_get_contents();
+		ob_get_clean();
+		return $output;
+	}
+
+	function future_events(){
+		ob_start();
+		require_once plugin_dir_path( __FILE__ )."partials/future-events.php";
 		$output = ob_get_contents();
 		ob_get_clean();
 		return $output;
@@ -240,8 +258,9 @@ class Cfa_Events_Public {
 			$registrant_name = sanitize_text_field($data['registrant_name']);
 			$registrant_email = sanitize_email($data['registrant_email']);
 			$registrant_phone = intval($data['registrant_phone']);
+			$registrant_company = sanitize_text_field($data['registrant_company']);
 
-			if(!empty($registrant_name) && !empty($registrant_email) && !empty($registrant_phone)){
+			if(!empty($registrant_name) && !empty($registrant_email) && !empty($registrant_phone) && !empty($registrant_company)){
 				global $wpdb;
 				$defaultZone = wp_timezone_string();
 				date_default_timezone_set($defaultZone);
@@ -252,10 +271,9 @@ class Cfa_Events_Public {
 						'name' => $registrant_name,
 						'email' => $registrant_email,
 						'phone' => $registrant_phone,
+						'company' => $registrant_company,
 						'created' => date("Y-m-d h:i:s")
-					), array("%d", "%s", "%s", "%d", "%s"));
-	
-					$_SESSION['event_registrants'] = $event_id;
+					), array("%d", "%s", "%s", "%d", "%s", "%s"));
 
 					$eml_title = sanitize_text_field( get_post_meta($event_id, 'cfa_email_title' , true) );
 					$email_subject = sanitize_text_field( get_post_meta($event_id, 'cfa_email_subject' , true) );
@@ -273,8 +291,9 @@ class Cfa_Events_Public {
 						$this->send_email_notification($emaildata); // Sent email
 					}
 	
-					echo json_encode(array("success" => "We are looking forward to seeing you at our event. You will recieve a confirmation email for your registration shortly.
-					If you haven't already, add this event to your calendar using the links above to make sure you don't miss it."));
+					echo json_encode(array("success" => "<p>You will receive a confirmation email for your registration shortly.</p>
+					<p>If you haven't already, add this event to your calendar using the link above to make sure you don't miss it.</p>
+					<p>We look forward to seeing you at our event!</p>"));
 				
 					die;
 				}else{
@@ -392,19 +411,19 @@ class Cfa_Events_Public {
 				if($event_date){
 					$event_date = date("j F, Y", strtotime($event_date));
 				}
-				$location = get_post_meta($event_id, '__event_location', true);
+				$venue_info = get_post_meta($event_id, "__event_venue_info", true);
 				$thumbnail = ((get_the_post_thumbnail_url(  )) ? get_the_post_thumbnail_url(  ) : get_option('cfa_fallback_thumb') );
 
 				$len = ((get_option('excerpt_length')) ? get_option('excerpt_length') : 10);
-				$excerpt = wp_trim_words(get_the_excerpt( get_post()->ID ), $len);
-				$permalink = get_the_permalink( get_post()->ID );
+				$excerpt = wp_trim_words(get_the_excerpt( $event_id ), $len);
+				$permalink = get_the_permalink( $event_id );
 
 				$event = array(
 					'event_id' => $event_id,
 					'title' => $post_title,
 					'thumbnail' => $thumbnail,
 					'date' => (($event_date) ? $event_date : ''),
-					'location' => $location,
+					'venue' => $venue_info,
 					'excerpt' => $excerpt,
 					'permalink' => $permalink
 				);

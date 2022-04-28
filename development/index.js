@@ -116,6 +116,7 @@ const cfasingle = new Vue({
         registrant_name: "",
         registrant_email: "",
         registrant_phone: "",
+        registrant_company: "",
         submittedAlert: ""
     },
     methods: {
@@ -125,8 +126,9 @@ const cfasingle = new Vue({
             let registrant_name = this.registrant_name;
             let registrant_email = this.registrant_email;
             let registrant_phone = this.registrant_phone;
+            let registrant_company = this.registrant_company;
 
-            let data = {event_id, registrant_name, registrant_email, registrant_phone};
+            let data = {event_id, registrant_name, registrant_email, registrant_phone, registrant_company};
 
             jQuery.ajax({
                 type: "post",
@@ -144,8 +146,7 @@ const cfasingle = new Vue({
                     cfasingle.isDisabled = false;
                     if(response.success){
                         cfasingle.isForm = false;
-                        let alerts = `<h3 style="margin-bottom: 10px;" class="head3"><strong>Thank</strong> You</h3>
-                        <p style="margin: 0;">${response.success}</p>`;
+                        let alerts = `<h3 style="margin-bottom: 10px;" class="head3"><strong>Thank</strong> You</h3>${response.success}`;
 
                         cfasingle.submittedAlert = alerts;
                     }

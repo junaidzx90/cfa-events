@@ -18,6 +18,7 @@ if($end_time){
 }
 
 $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
+$venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
 ?>
 
 <div id="event_page">
@@ -36,7 +37,7 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
 
     <h1 class="head1"><?php echo the_title(); ?></h1>
 
-    <p class="event__date"><?php echo $date.(($event_location && $date) ? ' | ' : '').$event_location ?></p>
+    <p class="event__date"><?php echo $date.(($venue_info) ? ' | ' : '').$venue_info.(($event_location) ? ' | ' : '').$event_location ?></p>
 
     <div class="event_thumbnail">
         <?php echo ((get_the_post_thumbnail_url()) ? the_post_thumbnail( 'large' ) : '<img src="'.get_option('cfa_fallback_thumb').'" alt="thumbnail">') ?>
@@ -54,7 +55,7 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
             <?php
             if(!empty($location_url)){
                 ?>
-                <p class="location"><strong>Venue:</strong> <?php echo $event_location ?> <a target="_blank" href="<?php echo (($location_url) ? $location_url : '#') ?>">View map</a></p>
+                <p class="location"><strong>Venue: </strong><?php echo $venue_info ?> <?php echo ((!empty($venue_info) && !empty($event_location)) ? '|': '') ?> <?php echo $event_location ?> <a target="_blank" href="<?php echo (($location_url) ? $location_url : '#') ?>">View map</a></p>
                 <?php
             }
             ?>
@@ -71,35 +72,27 @@ $location_url = get_post_meta(get_post()->ID, '__event_location_url', true);
             </div>
         </div>
 
-        <?php 
-        $registarant = false;
-        if(isset($_SESSION['event_registrants']) && intval($_SESSION['event_registrants']) === get_post()->ID){
-            $registarant = true;
-        }elseif(isset($_SESSION['event_registrants']) && intval($_SESSION['event_registrants']) !== get_post()->ID){
-            $registarant = false;
-        }else{
-            $registarant = false;
-        }
-        if(!$registarant){
-            ?>
-            <div class="event_registration_form">
-                <div v-if="isForm">
-                    <h3 class="head3"><strong>Register</strong> Here</h3>
-                    <form action="" method="post">
-                        <div class="reg_inputs">
-                            <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
-                            <input :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
-                            <input :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
-                            <input :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
-                        </div>
+        <div class="event_registration_form">
+            <div v-if="isForm">
+                <h3 class="head3"><strong>Register</strong> Here</h3>
+                <form action="" method="post">
+                    <div class="reg_inputs">
+                        <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
+                        <input :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
+                        <input :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
+                        <input :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
+                        <input :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
 
-                        <input :disabled="isDisabled" type="submit" value="Join" @click="register_form_submit(event)" name="event_join" class="event-join-btn">
-                    </form>
-                </div>
-                <div  v-if="isForm === false" v-html="submittedAlert"></div>
+                        <div class="blankspacer"></div>
+                        <div class="joinbutton">
+                            <input :disabled="isDisabled" type="submit" value="Join" @click="register_form_submit(event)" name="event_join" class="event-join-btn">
+                        </div>
+                    </div>
+                </form>
             </div>
-            <?php
-        }
+            <div class="submission-alert" v-if="isForm === false" v-html="submittedAlert"></div>
+        </div>
+        <?php
     }
     ?>
 </div>

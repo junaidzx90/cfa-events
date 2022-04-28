@@ -90,3 +90,12 @@ td.export_registrants {
 .cfa_eml_input {
     margin-bottom: 20px;
 }
+.event_metadata table{
+    margin: 0;
+    width: 100%;
+}
+.event_metadata table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
