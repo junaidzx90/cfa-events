@@ -78,7 +78,6 @@ class Cfa_Events {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -158,7 +157,10 @@ class Cfa_Events {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		$this->loader->add_action( 'init', $plugin_admin, 'events_post_type' );
-
+		$this->loader->add_action( "post_row_actions", $plugin_admin, "remove_quick_edit_events", 99, 2);
+		$this->loader->add_action( "bulk_actions-edit-events", $plugin_admin, "remove_events_edit_actions", 99);
+		$this->loader->add_action( 'manage_edit-events_sortable_columns', $plugin_admin, 'manage_events_sortable_columns', 10);
+		
 		$this->loader->add_action( 'add_meta_boxes_events', $plugin_admin, 'events_post_type_metaboxes', 99 );
 
 		// Export link

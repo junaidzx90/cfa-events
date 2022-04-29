@@ -138,9 +138,9 @@ class Cfa_Events_Admin {
 		  
 		register_post_type( 'events', $args );
 
-		if(get_option( 'cfa_events_permalinks_flush' ) !== '1'){
+		if(get_option( 'cfa_events_permalinks_flush' ) !== $this->version ){
 			flush_rewrite_rules(false);
-			update_option( 'cfa_events_permalinks_flush', '1' );
+			update_option( 'cfa_events_permalinks_flush', $this->version );
 		}
 	}
 
@@ -251,6 +251,7 @@ class Cfa_Events_Admin {
 		$new_columns = array(
 			'title' => __('Title', 'cfa-events'),
 			'event_date' => __('Date', 'cfa-events'),
+			'registrants' => __('Registrants', 'cfa-events'),
 			'durations' => __('Duration', 'cfa-events'),
 			'date' => __('Created', 'cfa-events'),
 		);
@@ -258,6 +259,27 @@ class Cfa_Events_Admin {
 		return array_merge($columns, $new_columns);
 	}
 
+	// Remove Quick edit
+	function remove_quick_edit_events( $actions, $post ) {
+		if(get_post_type( $post ) === 'events'){
+			unset($actions['inline hide-if-no-js']);
+			return $actions;
+		}else{
+			return $actions;
+		}
+	}
+
+	//   Remove edit option from bulk
+	function remove_events_edit_actions( $actions ){
+		unset( $actions['edit'] );
+		return $actions;
+	}
+
+	function manage_events_sortable_columns($columns){
+		// $columns['event_date'] = 'event_date';
+		// $columns['registrants'] = 'registrants';
+		return $columns;
+	}
 	
 	// View custom column data
 	function manage_events_columns_views($column_id, $post_id){
@@ -267,6 +289,11 @@ class Cfa_Events_Admin {
 				if($cfa_date){
 					echo date("F j, Y", strtotime($cfa_date));
 				}
+				break;
+			case 'registrants':
+				global $wpdb;
+				$registrants = $wpdb->query("SELECT ID FROM {$wpdb->prefix}cfa_registrants WHERE event_id = $post_id");
+				echo (($registrants) ? $registrants : 0);
 				break;
 			case 'durations':
 				
