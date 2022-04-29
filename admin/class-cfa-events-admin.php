@@ -133,7 +133,7 @@ class Cfa_Events_Admin {
 			'menu_position'      => 45,
 			'menu_icon'      	 => 'dashicons-calendar-alt',
 			'supports'           => array( 'title', 'excerpt', 'editor', 'thumbnail' ),
-			'show_in_rest'       => false
+			'show_in_rest'       => true
 		);
 		  
 		register_post_type( 'events', $args );
