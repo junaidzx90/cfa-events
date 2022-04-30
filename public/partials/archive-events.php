@@ -42,7 +42,7 @@
                     }
                 }
 
-                asort($years);
+                rsort($years);
 
                 if(sizeof($years)){
                     foreach($years as $year){

@@ -35,8 +35,7 @@
 }
 #cfa_events .previous_events .years_filter .years_btns span.yrbtn:hover {
   transition: 500ms;
-  background-color: var(--cfa_selected_color);
-  color: var(--cfa_selected_text_color);
+  opacity: 0.5;
   -webkit-transition: 500ms;
   -moz-transition: 500ms;
   -ms-transition: 500ms;
@@ -70,13 +69,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
-  z-index: 999999;
+  z-index: 9999;
 }
 
 .events_wrapper {
@@ -158,8 +164,7 @@
 }
 .events_wrapper .event_card .seemore_btn_box a.cfa_btn:hover {
   transition: 0.3s;
-  background-color: var(--cfa_selected_color);
-  color: var(--cfa_selected_text_color);
+  opacity: 0.5;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
@@ -263,7 +268,7 @@ div#event_page .information_box .calendars a {
 div#event_page .event_registration_form {
   margin-top: 30px;
   background-color: #8FD9F9;
-  padding: 30px;
+  padding: 30px 30px 55px;
 }
 div#event_page .event_registration_form h3.head3 {
   font-size: 26px;
@@ -275,7 +280,7 @@ div#event_page .event_registration_form form {
   text-align: right;
 }
 div#event_page .event_registration_form form .reg_inputs {
-  padding: 30px 0 0;
+  padding: 20px 0 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31%, 1fr));
   grid-gap: 20px;
@@ -285,12 +290,19 @@ div#event_page .event_registration_form form .reg_inputs input {
   text-align: left;
   padding: 5px 10px;
   height: auto;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #7d8994;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  border: 2px solid #000;
   font-size: 16px;
   height: 26px;
+}
+div#event_page .event_registration_form form .reg_inputs input::placeholder {
+  color: rgba(0, 0, 0, 0.5647058824);
+}
+div#event_page .event_registration_form form .reg_inputs input:-webkit-autofill,
+div#event_page .event_registration_form form .reg_inputs input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
 div#event_page .event_registration_form form .reg_inputs input.event-join-btn {
   background-color: #3E3F94;
@@ -307,8 +319,7 @@ div#event_page .event_registration_form form .reg_inputs input.event-join-btn:ho
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
-  background-color: transparent;
-  color: #3E3F94;
+  opacity: 0.5;
 }
 div#event_page .event_registration_form form .reg_inputs input:disabled {
   opacity: 0.5 !important;

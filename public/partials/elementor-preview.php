@@ -1,13 +1,14 @@
 <?php
+$perpage = ((get_option('events_perpage')) ? intval(get_option('events_perpage')) : 12);
 $previousEvents = array();
 $args2 = array(
     'post_type' => 'events',
     'post_status' => 'publish',
-    'numberposts' => 12,
+    'numberposts' => $perpage,
     'meta_key' => '__event_date',
     'orderby' => 'meta_value',
     'meta_type' => 'DATE',
-    'order' => 'ASC'
+    'order' => 'DESC'
 );
 
 $events = get_posts( $args2 );

@@ -146,10 +146,6 @@ class Cfa_Events_Admin {
 
 	// Add meta boxespostcustom
 	function events_post_type_metaboxes(){
-		global $wp_meta_boxes;
-		unset($wp_meta_boxes['events']);
-		add_meta_box( 'submitdiv', "Publish", 'post_submit_meta_box', 'events', 'side' );
-		add_meta_box( 'postexcerpt', "Excerpt", 'post_excerpt_meta_box', 'events', 'advanced', 'high' );
 		add_meta_box( 'eventdate', "Event date", [$this, 'event_date_meta_box'], 'events', 'side' );
 		add_meta_box( 'eventmetadata', "Event Info", [$this, 'event_metadata_meta_box'], 'events', 'side' );
 		add_meta_box( 'postimagediv', "Featured image", 'post_thumbnail_meta_box', 'events', 'side' );
@@ -299,8 +295,8 @@ class Cfa_Events_Admin {
 				
 				$start_time = get_post_meta($post_id, '__event_start_time', true);
 				$end_time = get_post_meta($post_id, '__event_end_time', true);
-				
-				echo date("g:ia", strtotime($start_time))." - ".date("g:ia", strtotime($end_time));
+				if($start_time && $end_time)
+					echo date("g:ia", strtotime($start_time))." - ".date("g:ia", strtotime($end_time));
 				break;
 		}
 	}
@@ -340,18 +336,18 @@ class Cfa_Events_Admin {
 			if($events){
 				foreach($events as $event){
 					$cfa_date = get_post_meta($event->ID, '__event_date', true);
-					if(!$cfa_date){
-						return;
-					}
-					$cfa_date = date("j F, Y", strtotime($cfa_date));
-
 					if($cfa_date){
-						$y = explode(', ', $cfa_date)[1];
-						$yearsList[$y] = $y;
+						$cfa_date = date("j F, Y", strtotime($cfa_date));
+
+						if($cfa_date){
+							$y = explode(', ', $cfa_date)[1];
+							$yearsList[$y] = $y;
+						}
 					}
 				}
 			}
-			arsort($yearsList);
+			
+			rsort($yearsList);
 			if(sizeof($yearsList) > 0){
 				foreach($yearsList as $year){
 					$selected = ((isset($_REQUEST['cfa_year_filter'])) ? $_REQUEST['cfa_year_filter'] : '');
@@ -385,7 +381,13 @@ class Cfa_Events_Admin {
 					)
 				);
 			}
+		}else{
+			$query->set('orderby', 'meta_value');
+        	$query->set('meta_key', '__event_date');
+			$query->set('meta_type', 'DATE');
+			$query->set('order', 'DESC');
 		}
+
 		return $query;
 	}
 
@@ -523,7 +525,7 @@ class Cfa_Events_Admin {
 		echo '<input type="text" name="cfa_selected_color" id="cfa_selected_color" data-default-color="#8FD9F9" value="'.((get_option('cfa_selected_color')) ? get_option('cfa_selected_color') : '#8FD9F9').'">';
 	}
 	function cfa_selected_text_color_cb(){
-		echo '<input type="text" name="cfa_selected_text_color" id="cfa_selected_text_color" data-default-color="#3E3F94" value="'.((get_option('cfa_selected_text_color')) ? get_option('cfa_selected_text_color') : '#3E3F94').'">';
+		echo '<input type="text" name="cfa_selected_text_color" id="cfa_selected_text_color" data-default-color="#ffffff" value="'.((get_option('cfa_selected_text_color')) ? get_option('cfa_selected_text_color') : '#ffffff').'">';
 	}
 	function cfa_title_color_cb(){
 		echo '<input type="text" name="cfa_title_color" id="cfa_title_color" data-default-color="#333333" value="'.((get_option('cfa_title_color')) ? get_option('cfa_title_color') : '#333333').'">';

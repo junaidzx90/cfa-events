@@ -133,7 +133,7 @@ class Cfa_Events_Public {
 				--cfa_static_color: <?php echo ((get_option('cfa_static_color')) ? get_option('cfa_static_color') : '#3E3F94') ?>;
 				--cfa_static_text_color: <?php echo ((get_option('cfa_static_text_color')) ? get_option('cfa_static_text_color') : '#FFFFFF') ?>;
 				--cfa_selected_color: <?php echo ((get_option('cfa_selected_color')) ? get_option('cfa_selected_color') : '#8FD9F9') ?>;
-				--cfa_selected_text_color: <?php echo ((get_option('cfa_selected_text_color')) ? get_option('cfa_selected_text_color') : '#3E3F94') ?>;
+				--cfa_selected_text_color: <?php echo ((get_option('cfa_selected_text_color')) ? get_option('cfa_selected_text_color') : '#ffffff') ?>;
 				--cfa_title_color: <?php echo ((get_option('cfa_title_color')) ? get_option('cfa_title_color') : '#333333') ?>;
 				--cfa_card_title_font_size: <?php echo ((get_option('cfa_card_title_font_size')) ? get_option('cfa_card_title_font_size').'px' : '18px') ?>;
 				--cfa_card_title_font_weight: <?php echo ((get_option('cfa_card_title_font_weight')) ? get_option('cfa_card_title_font_weight') : '700') ?>;
@@ -383,7 +383,7 @@ class Cfa_Events_Public {
 			'meta_key' => '__event_date',
 			'orderby' => 'meta_value',
 			'meta_type' => 'DATE',
-			'order' => 'ASC',
+			'order' => 'DESC',
 		);
 
 		if(isset($_GET['year']) && !empty($_GET['year']) && $_GET['year'] !== 'all'){

@@ -7,7 +7,14 @@ $args2 = array(
     'meta_key' => '__event_date',
     'orderby' => 'meta_value',
     'meta_type' => 'DATE',
-    'order' => 'DESC',
+    'order'     => 'DESC',
+    'meta_query' => array(
+        array(
+            'key' => '__event_date',
+            'value' => date("Y-m-d"),
+            'compare' => '<'
+        )
+    )
 );
 
 $events = get_posts( $args2 );
@@ -18,24 +25,25 @@ if($events){
         $event_date = get_post_meta($event_id, '__event_date', true);
         if($event_date){
             $event_date = date("j F, Y", strtotime($event_date));
+
+            $venue_info = get_post_meta($event_id, "__event_venue_info", true);;
+            $thumbnail = ((get_the_post_thumbnail_url( $event_id )) ? get_the_post_thumbnail_url( $event_id ) : get_option('cfa_fallback_thumb') );
+            $len = ((get_option('excerpt_length')) ? get_option('excerpt_length') : 10);
+            $excerpt = wp_trim_words(get_the_excerpt( $event_id ), $len);
+            $permalink = get_the_permalink( $event->ID );
+    
+            $eventArr = array(
+                'event_id' => $event_id,
+                'title' => $event_title,
+                'thumbnail' => $thumbnail,
+                'date' => $event_date,
+                'venue' => $venue_info,
+                'excerpt' => $excerpt,
+                'permalink' => $permalink
+            );
+    
+            $latestEvents[] = $eventArr;
         }
-        $venue_info = get_post_meta($event_id, "__event_venue_info", true);;
-        $thumbnail = ((get_the_post_thumbnail_url( $event_id )) ? get_the_post_thumbnail_url( $event_id ) : get_option('cfa_fallback_thumb') );
-        $len = ((get_option('excerpt_length')) ? get_option('excerpt_length') : 10);
-        $excerpt = wp_trim_words(get_the_excerpt( $event_id ), $len);
-        $permalink = get_the_permalink( $event->ID );
-
-        $eventArr = array(
-            'event_id' => $event_id,
-            'title' => $event_title,
-            'thumbnail' => $thumbnail,
-            'date' => $event_date,
-            'venue' => $venue_info,
-            'excerpt' => $excerpt,
-            'permalink' => $permalink
-        );
-
-        $latestEvents[] = $eventArr;
     }
 }
 

@@ -37,7 +37,7 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
 
     <h1 class="head1"><?php echo the_title(); ?></h1>
 
-    <p class="event__date"><?php echo $date.(($venue_info) ? ' | ' : '').$venue_info.(($event_location) ? ' | ' : '').$event_location ?></p>
+    <p class="event__date"><?php echo $date.(($venue_info) ? ' | ' : '').$venue_info ?></p>
 
     <div class="event_thumbnail">
         <?php echo ((get_the_post_thumbnail_url()) ? the_post_thumbnail( 'large' ) : '<img src="'.get_option('cfa_fallback_thumb').'" alt="thumbnail">') ?>
@@ -78,10 +78,10 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                 <form action="" method="post">
                     <div class="reg_inputs">
                         <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
-                        <input :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
-                        <input :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
-                        <input :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
-                        <input :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
+                        <input autocomplete=off" :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
+                        <input autocomplete=off" :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
+                        <input autocomplete=off" :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
+                        <input autocomplete=off" :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
 
                         <div class="blankspacer"></div>
                         <div class="joinbutton">
