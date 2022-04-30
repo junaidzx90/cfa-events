@@ -55,7 +55,7 @@ function get_local_timezone() {
     );
 
     /* translators: %s is UTC offset, e.g. "+1" */
-    return sprintf( __( 'UTC%s', 'jetpack-sync' ), $formatted_gmt_offset );
+    return sprintf( __( 'UTC%s', 'cfa-events' ), $formatted_gmt_offset );
 }
 
 function get_active_event($event_id){
