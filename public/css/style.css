@@ -58,8 +58,7 @@
 }
 #cfa_events .previous_events .loadmore_box button.loadmore_events:hover {
   transition: 0.3s;
-  background-color: var(--cfa_selected_color);
-  color: var(--cfa_selected_text_color);
+  opacity: 0.5;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;

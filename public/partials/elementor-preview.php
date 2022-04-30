@@ -6,9 +6,17 @@ $args2 = array(
     'post_status' => 'publish',
     'numberposts' => $perpage,
     'meta_key' => '__event_date',
+    'meta_key' => '__event_date',
     'orderby' => 'meta_value',
     'meta_type' => 'DATE',
-    'order' => 'DESC'
+    'order'     => 'DESC',
+    'meta_query' => array(
+        array(
+            'key' => '__event_date',
+            'value' => date("Y-m-d"),
+            'compare' => '<'
+        )
+    )
 );
 
 $events = get_posts( $args2 );

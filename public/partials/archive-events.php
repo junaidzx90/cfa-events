@@ -24,7 +24,18 @@
                 $args = array(
                     'post_type' => 'events',
                     'post_status' => 'publish',
-                    'numberposts' => -1
+                    'numberposts' => -1,
+                    'meta_key' => '__event_date',
+                    'orderby' => 'meta_value',
+                    'meta_type' => 'DATE',
+                    'order'     => 'DESC',
+                    'meta_query' => array(
+                        array(
+                            'key' => '__event_date',
+                            'value' => date("Y-m-d"),
+                            'compare' => '<'
+                        )
+                    )
                 );
                 
                 $years = array();

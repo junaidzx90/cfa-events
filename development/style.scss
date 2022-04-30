@@ -61,8 +61,7 @@
             }
             button.loadmore_events:hover{
                 transition: .3s;
-                background-color: var(--cfa_selected_color);
-                color: var(--cfa_selected_text_color);
+                opacity: .5;
                 -webkit-transition: .3s;
                 -moz-transition: .3s;
                 -ms-transition: .3s;

@@ -58,9 +58,11 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                 <p class="location"><strong>Venue: </strong><?php echo $venue_info ?> <?php echo ((!empty($venue_info) && !empty($event_location)) ? '|': '') ?> <?php echo $event_location ?> <a target="_blank" href="<?php echo (($location_url) ? $location_url : '#') ?>">View map</a></p>
                 <?php
             }
+
+            $defaultZone = wp_timezone_string();
             ?>
             <p><strong>Date:</strong> <?php echo $date ?></p>
-            <p><strong>Time:</strong> <?php echo $star_time." - ".$end_time?></p>
+            <p><strong>Time:</strong> <?php echo $star_time." - ".$end_time?> (<?php echo $defaultZone ?>)</p>
 
             <div class="calendars">
                 <span class="calendar_icon">
@@ -78,10 +80,10 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                 <form action="" method="post">
                     <div class="reg_inputs">
                         <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
-                        <input autocomplete=off" :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
-                        <input autocomplete=off" :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
-                        <input autocomplete=off" :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
-                        <input autocomplete=off" :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
+                        <input autocomplete="off" :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
+                        <input autocomplete="off" :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
+                        <input autocomplete="off" :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
+                        <input autocomplete="off" :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
 
                         <div class="blankspacer"></div>
                         <div class="joinbutton">
