@@ -37,6 +37,27 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'CFA_EVENTS_VERSION', '1.0.5' );
 
+function get_local_timezone() {
+    $timezone_string = get_option( 'timezone_string' );
+
+    if ( ! empty( $timezone_string ) ) {
+      return str_replace( '_', ' ', $timezone_string );
+    }
+
+    $gmt_offset = get_option( 'gmt_offset', 0 );
+
+    $formatted_gmt_offset = sprintf( '%+g', (float) $gmt_offset );
+
+    $formatted_gmt_offset = str_replace(
+      array( '.25', '.5', '.75' ),
+      array( ':15', ':30', ':45' ),
+      (string) $formatted_gmt_offset
+    );
+
+    /* translators: %s is UTC offset, e.g. "+1" */
+    return sprintf( __( 'UTC%s', 'jetpack-sync' ), $formatted_gmt_offset );
+}
+
 function get_active_event($event_id){
 	$defaultZone = wp_timezone_string();
 	if($defaultZone){

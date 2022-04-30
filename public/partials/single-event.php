@@ -59,7 +59,7 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                 <?php
             }
 
-            $defaultZone = wp_timezone_string();
+            $defaultZone = get_local_timezone();
             ?>
             <p><strong>Date:</strong> <?php echo $date ?></p>
             <p><strong>Time:</strong> <?php echo $star_time." - ".$end_time?> (<?php echo $defaultZone ?>)</p>
