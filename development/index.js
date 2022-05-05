@@ -117,6 +117,7 @@ const cfasingle = new Vue({
         registrant_email: "",
         registrant_phone: "",
         registrant_company: "",
+        participants: "",
         submittedAlert: ""
     },
     methods: {
@@ -127,8 +128,9 @@ const cfasingle = new Vue({
             let registrant_email = this.registrant_email;
             let registrant_phone = this.registrant_phone;
             let registrant_company = this.registrant_company;
+            let participants = this.participants;
 
-            let data = {event_id, registrant_name, registrant_email, registrant_phone, registrant_company};
+            let data = {event_id, registrant_name, registrant_email, registrant_phone, registrant_company, participants};
 
             jQuery.ajax({
                 type: "post",

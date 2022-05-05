@@ -259,8 +259,9 @@ class Cfa_Events_Public {
 			$registrant_email = sanitize_email($data['registrant_email']);
 			$registrant_phone = intval($data['registrant_phone']);
 			$registrant_company = sanitize_text_field($data['registrant_company']);
+			$participants = intval($data['participants']);
 
-			if(!empty($registrant_name) && !empty($registrant_email) && !empty($registrant_phone) && !empty($registrant_company)){
+			if(!empty($registrant_name) && !empty($registrant_email) && !empty($registrant_phone) && !empty($registrant_company) && !empty($participants)){
 				global $wpdb;
 				$defaultZone = wp_timezone_string();
 				date_default_timezone_set($defaultZone);
@@ -272,8 +273,9 @@ class Cfa_Events_Public {
 						'email' => $registrant_email,
 						'phone' => $registrant_phone,
 						'company' => $registrant_company,
+						'participants' => $participants,
 						'created' => date("Y-m-d h:i:s")
-					), array("%d", "%s", "%s", "%d", "%s", "%s"));
+					), array("%d", "%s", "%s", "%d", "%s", '%d', "%s"));
 
 					$eml_title = sanitize_text_field( get_post_meta($event_id, 'cfa_email_title' , true) );
 					$email_subject = sanitize_text_field( get_post_meta($event_id, 'cfa_email_subject' , true) );

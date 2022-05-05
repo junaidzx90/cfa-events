@@ -84,8 +84,8 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                         <input autocomplete="off" :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
                         <input autocomplete="off" :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
                         <input autocomplete="off" :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
+                        <input autocomplete="off" :disabled="isDisabled" name="number_of_participants" placeholder="Number of Participants" onkeypress="return /[0-9]/i.test(event.key)" v-model="participants" type="text">
 
-                        <div class="blankspacer"></div>
                         <div class="joinbutton">
                             <input :disabled="isDisabled" type="submit" value="Join" @click="register_form_submit(event)" name="event_join" class="event-join-btn">
                         </div>

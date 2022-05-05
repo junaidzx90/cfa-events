@@ -70,7 +70,7 @@ class Cfa_Events {
 		if ( defined( 'CFA_EVENTS_VERSION' ) ) {
 			$this->version = CFA_EVENTS_VERSION;
 		} else {
-			$this->version = '1.0.5';
+			$this->version = '1.0.6';
 		}
 		$this->plugin_name = 'cfa-events';
 
