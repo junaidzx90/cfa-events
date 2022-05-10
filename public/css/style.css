@@ -275,6 +275,11 @@ div#event_page .event_registration_form h3.head3 {
 div#event_page .event_registration_form h3.head3 strong {
   font-weight: 900;
 }
+@media only screen and (max-width: 768px) {
+  div#event_page .event_registration_form {
+    padding: 30px;
+  }
+}
 div#event_page .event_registration_form form {
   text-align: right;
 }
@@ -283,6 +288,11 @@ div#event_page .event_registration_form form .reg_inputs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31%, 1fr));
   grid-gap: 20px;
+}
+@media only screen and (max-width: 768px) {
+  div#event_page .event_registration_form form .reg_inputs {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
 }
 div#event_page .event_registration_form form .reg_inputs input {
   all: unset;
