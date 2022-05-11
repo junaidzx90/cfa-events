@@ -80,11 +80,11 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
                 <form action="" method="post">
                     <div class="reg_inputs">
                         <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
-                        <input autocomplete="off" :disabled="isDisabled" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
-                        <input autocomplete="off" :disabled="isDisabled" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
+                        <input autocomplete="off" :disabled="isDisabled" id="form__name" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
+                        <input autocomplete="off" :disabled="isDisabled" id="form__email" type="email" placeholder="Your email" v-model="registrant_email" name="event_registrant_email">
                         <input autocomplete="off" :disabled="isDisabled" type="text" placeholder="Your phone number" v-model="registrant_phone" name="event_registrant_phone">
                         <input autocomplete="off" :disabled="isDisabled" name="company_organization" placeholder="Company / Organization" v-model="registrant_company" type="text">
-                        <input autocomplete="off" :disabled="isDisabled" name="number_of_participants" placeholder="Number of Participants" onkeypress="return /[0-9]/i.test(event.key)" v-model="participants" type="text">
+                        <input autocomplete="off" :disabled="isDisabled" id="form__participants" name="number_of_participants" placeholder="Number of Participants" onkeypress="return /[0-9]/i.test(event.key)" v-model="participants" type="text">
 
                         <div class="joinbutton">
                             <input :disabled="isDisabled" type="submit" value="Join" @click="register_form_submit(event)" name="event_join" class="event-join-btn">

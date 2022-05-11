@@ -261,12 +261,12 @@ class Cfa_Events_Public {
 			$registrant_company = sanitize_text_field($data['registrant_company']);
 			$participants = intval($data['participants']);
 
-			if(!empty($registrant_name) && !empty($registrant_email) && !empty($registrant_phone) && !empty($registrant_company) && !empty($participants)){
+			if(!empty($registrant_name) && !empty($registrant_email) && !empty($participants)){
 				global $wpdb;
 				$defaultZone = wp_timezone_string();
 				date_default_timezone_set($defaultZone);
 
-				if(!$wpdb->get_var("SELECT ID FROM {$wpdb->prefix}cfa_registrants WHERE event_id = $event_id AND email = '$registrant_email' AND phone = '$registrant_phone'")){
+				if(!$wpdb->get_var("SELECT ID FROM {$wpdb->prefix}cfa_registrants WHERE event_id = $event_id AND email = '$registrant_email'")){
 					$wpdb->insert($wpdb->prefix.'cfa_registrants', array(
 						'event_id' => $event_id,
 						'name' => $registrant_name,
@@ -303,7 +303,7 @@ class Cfa_Events_Public {
 					die;	
 				}
 			}else{
-				echo json_encode(array("error" => "All fields are required!"));
+				echo json_encode(array("error" => "Some fields are mandatory!"));
 				die;
 			}
 		}

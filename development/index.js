@@ -132,31 +132,58 @@ const cfasingle = new Vue({
 
             let data = {event_id, registrant_name, registrant_email, registrant_phone, registrant_company, participants};
 
-            jQuery.ajax({
-                type: "post",
-                url: cfa_ajax.ajaxurl,
-                data: {
-                    action: "registrants_register",
-                    nonce: cfa_ajax.nonce,
-                    data: data
-                },
-                beforeSend: function(){
-                    cfasingle.isDisabled = true;
-                },
-                dataType: "json",
-                success: function (response) {
-                    cfasingle.isDisabled = false;
-                    if(response.success){
-                        cfasingle.isForm = false;
-                        let alerts = `<h3 style="margin-bottom: 10px;" class="head3"><strong>Thank</strong> You</h3>${response.success}`;
-
-                        cfasingle.submittedAlert = alerts;
+            if(registrant_name !== "" && registrant_email !== "" && participants !== ""){
+                jQuery.ajax({
+                    type: "post",
+                    url: cfa_ajax.ajaxurl,
+                    data: {
+                        action: "registrants_register",
+                        nonce: cfa_ajax.nonce,
+                        data: data
+                    },
+                    beforeSend: function(){
+                        cfasingle.isDisabled = true;
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        cfasingle.isDisabled = false;
+                        if(response.success){
+                            cfasingle.isForm = false;
+                            let alerts = `<h3 style="margin-bottom: 10px;" class="head3"><strong>Thank</strong> You</h3>${response.success}`;
+    
+                            cfasingle.submittedAlert = alerts;
+                        }
+                        if(response.error){
+                            alert(response.error);
+                        }
                     }
-                    if(response.error){
-                        alert(response.error);
-                    }
+                });
+            }else{
+                if(registrant_name.length === 0){
+                    jQuery("#form__name").css("border-color", "red");
                 }
-            });
+                if(registrant_email.length === 0){
+                    jQuery("#form__email").css("border-color", "red");
+                }
+                if(participants.length === 0){
+                    jQuery("#form__participants").css("border-color", "red");
+                }
+            }
+        }
+    },
+    updated: function () { 
+        let registrant_name = this.registrant_name;
+        let registrant_email = this.registrant_email;
+        let participants = this.participants;
+        
+        if(registrant_name.length > 0){
+            jQuery("#form__name").css("border-color", "#000");
+        }
+        if(registrant_email.length > 0){
+            jQuery("#form__email").css("border-color", "#000");
+        }
+        if(participants.length > 0){
+            jQuery("#form__participants").css("border-color", "#000");
         }
     }
 });
