@@ -148,7 +148,6 @@ class Cfa_Events_Admin {
 	function events_post_type_metaboxes(){
 		add_meta_box( 'eventdate', "Event date", [$this, 'event_date_meta_box'], 'events', 'side' );
 		add_meta_box( 'eventmetadata', "Event Info", [$this, 'event_metadata_meta_box'], 'events', 'side' );
-		add_meta_box( 'postimagediv', "Featured image", 'post_thumbnail_meta_box', 'events', 'side' );
 		add_meta_box( 'event_email', "Email template", [$this, 'post_event_email_meta_box'], 'events', 'advanced' );
 		add_meta_box( 'registrants', "Registrants", [$this, 'post_registrants_meta_box'], 'events', 'advanced' );
 	}

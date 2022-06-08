@@ -283,6 +283,17 @@ div#event_page .event_registration_form h3.head3 strong {
 div#event_page .event_registration_form form {
   text-align: right;
 }
+div#event_page .event_registration_form form .invalid_field_error {
+  text-align: left;
+  margin: 20px 0;
+}
+div#event_page .event_registration_form form .invalid_field_error p {
+  margin: 0;
+}
+div#event_page .event_registration_form form .invalid_field_error ul {
+  margin: 0px 14px;
+  list-style: disc;
+}
 div#event_page .event_registration_form form .reg_inputs {
   padding: 20px 0 0;
   display: grid;

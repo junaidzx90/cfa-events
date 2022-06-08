@@ -5,7 +5,7 @@ const cfa = new Vue({
         currentPage: 1,
 		max_pages: 0,
         previousEvents: [],
-        currentFilter: ''
+        currentFilter: '',
     },
     methods: {
         cfa_year_filter: function(event, year){
@@ -118,7 +118,8 @@ const cfasingle = new Vue({
         registrant_phone: "",
         registrant_company: "",
         participants: "",
-        submittedAlert: ""
+        submittedAlert: "",
+        formError: false
     },
     methods: {
         register_form_submit: function(e){
@@ -159,6 +160,7 @@ const cfasingle = new Vue({
                     }
                 });
             }else{
+                this.formError = true;
                 if(registrant_name.length === 0){
                     jQuery("#form__name").css("border-color", "red");
                 }
@@ -184,6 +186,10 @@ const cfasingle = new Vue({
         }
         if(participants.length > 0){
             jQuery("#form__participants").css("border-color", "#000");
+        }
+
+        if(registrant_name.length > 0 && registrant_email.length > 0 && participants.length > 0){
+            this.formError = false;
         }
     }
 });

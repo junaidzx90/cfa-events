@@ -285,6 +285,17 @@ div#event_page {
             padding: 30px;
         }
         form{
+            .invalid_field_error {
+                text-align: left;
+                margin: 20px 0;
+            }
+            .invalid_field_error p {
+                margin: 0;
+            }
+            .invalid_field_error ul {
+                margin: 0px 14px;
+                list-style: disc;
+            }
             text-align: right;
             .reg_inputs {
                 padding: 20px 0 0;

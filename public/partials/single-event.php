@@ -78,6 +78,15 @@ $venue_info = get_post_meta(get_post()->ID, "__event_venue_info", true);;
             <div v-if="isForm">
                 <h3 class="head3"><strong>Register</strong> Here</h3>
                 <form action="" method="post">
+                    <div v-if="formError" class="invalid_field_error">
+                        <p>Please, fill in the following fields:</p>
+                        <ul>
+                            <li v-if="registrant_name.length === 0">Name</li>
+                            <li v-if="registrant_email.length === 0">Email</li>
+                            <li v-if="participants.length === 0">Participants</li>
+                        </ul>
+                    </div>
+
                     <div class="reg_inputs">
                         <input type="hidden" name="event_id" value="<?php echo get_post()->ID ?>">
                         <input autocomplete="off" :disabled="isDisabled" id="form__name" type="text" placeholder="Your name" v-model="registrant_name" name="event_registrant_name">
